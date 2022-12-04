@@ -1,0 +1,150 @@
+/*Barre filtre  sur la page catalogue*/
+
+.filtre {
+    max-width: 345px;
+    flex-grow: 1;
+    align-self: baseline;
+    background-color: var(--palebeige);
+    margin-top: var(--spacing-XL);
+    margin-bottom: var(--spacing-XL);
+    margin-right: var(--spacing-S);
+    padding: var(--spacing-M);
+    font-family: var(--text);
+}
+
+.filtre h1 {
+    margin-bottom: 10px;
+    font-size: var(--L);
+}
+
+.filtre div{
+    margin-bottom: var(--S);
+}
+
+.filtre form>h1:first-of-type {
+    margin-top: 0;
+}
+
+.filtre .recherche {
+    display: flex;
+}
+
+.filtre .recherche input {
+    width: 100%;
+    padding: 5px;
+    font-size: var(--M);
+}
+
+.filtre .annee-prix div {
+    display: inline-block;
+}
+
+.filtre .annee-prix input {
+    margin-left: 5px;
+    margin-right: 5px;
+    max-width: 100px;
+    padding: 5px;
+}
+
+.filtre .container {
+    display: flex;
+    position: relative;
+    cursor: pointer;
+}
+
+.filtre label {
+    margin-bottom: 10px;
+}
+
+.filtre input[type="checkbox"] {
+    margin-left: auto;
+    text-align: end;
+}
+
+.filtre .favoris img {
+    width: 50px;
+}
+
+.filtre .favoris span {
+    margin-left: auto;
+    text-align: end;
+    filter: brightness(20) invert(100%);
+}
+
+.filtre .favoris input:checked~span {
+    filter: revert;
+}
+
+.filtre input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.filtre input[type="radio"]+label {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.filtre input[type="radio"]+label:hover {
+    text-decoration: underline;
+}
+
+.filtre input[type="radio"]:checked+label {
+    text-decoration: underline;
+}
+
+.filtre .btn {
+    margin-top: var(--spacing-M);
+    width: 100%;
+}
+
+.filtre-responsive{
+    display: none;
+}
+
+.filtre-responsive summary{
+    font-size: var(--M);
+    margin-top: var(--spacing-M);
+}
+
+/*Sur plus petit écrant la barre filtre est remplacé par une balise detail avec les mêmes paramêtre que la fiche sur plus grand format*/
+
+@media screen and (max-width: 500px) {
+
+    .filtre-responsive summary{
+        margin-left: var(--spacing-M);
+    }
+
+    .encheres{
+      padding-right: 0;
+      padding-left: 0;
+    }
+}
+
+
+@media screen and (max-width: 925px) {
+
+    .filtre-responsive{
+        display: block;
+    }
+
+    .filtre-responsive aside{
+        margin-top: var(--spacing-S);
+        margin-right: 0;
+    }
+
+    .hidden{
+        display: none;
+    }
+
+    .filtre {
+       margin-bottom: 0;
+    }
+
+    .encheres{
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,102 @@
+/*Les petites cartes de mise d'enchères*/
+
+.card {
+    background-color: var(--palebeige);
+    padding: var(--spacing-SM);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 300px;
+}
+
+.card a{
+    text-decoration: none;
+}
+
+.card picture {
+    display: flex;
+    margin: auto;
+    overflow: hidden;
+}
+
+.card img {
+    width: 100%;
+    object-fit: cover;
+    cursor: zoom-in;
+    transition: scale 200ms cubic-bezier(0.76, 0, 0.24, 1);
+    object-position: 100% 50%;
+}
+
+.card picture:hover img {
+    min-height: 200px;
+    scale: 2;
+    transition-duration: 800ms, 1200ms;
+}
+
+.card h1 {
+    margin: var(--spacing-S) 0 0 0;
+    text-align: center;
+}
+
+.card .temps {
+    margin-bottom: var(--spacing-XS);
+    position: relative;
+}
+
+.card small {
+    font-weight: bold;
+}
+
+.card .temps span+span {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+}
+
+.card hr {
+    width: 100%;
+    background: var(--oldblue);
+    background-image: linear-gradient(to right, #ccc, var(--oldblue), #ccc);
+    margin-bottom: var(--spacing-S);
+}
+
+.card .depart-actuel small {
+    display: block;
+    width: 100%;
+}
+
+.card .mise {
+    display: flex;
+}
+
+.card input {
+    width: 100px;
+    margin-left: auto;
+}
+
+.card .btn {
+    margin-top: var(--spacing-S);
+    width: 100%;
+}
+
+.card .hauteur-titre {
+    max-height: 70px;
+}
+
+.card .favoris{
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top:0;
+    right: 0;
+    background-color: var(--palebeige);
+    z-index: 1;
+}
+
+.card .favoris img{
+    cursor: pointer;
+}
+
+.card .favoris:hover{
+    cursor: pointer;  
+}

@@ -1,0 +1,105 @@
+/*Les cartes d'actualité de la page index*/
+
+.carte-actualite {
+    background-color: var(--palebeige);
+    display: flex;
+    padding: var(--spacing-M);
+
+}
+
+.carte-actualite>* {
+    width: 50%;
+}
+
+.carte-actualite div {
+    flex: 1;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.carte-actualite h2 {
+    font-size: var(--LL);
+}
+
+.carte-actualite p {
+    font-size: var(--L);
+    margin-bottom: var(--spacing-M);
+}
+
+.carte-actualite span{
+    font-size: var(--M);
+}
+
+.carte-actualite a {
+    font-size: var(--M);
+    display: block;
+    text-align: right;
+    text-decoration: none;
+}
+
+.carte-actualite a:hover {
+    color: var(--oldred);
+    text-decoration: underline;
+}
+
+.carte-actualite .texte-avant {
+    margin-right: var(--spacing-M);
+}
+
+.carte-actualite .texte-apres {
+    margin-left: var(--spacing-M);
+}
+
+
+.carte-actualite picture {
+    flex: 1;
+    width: 100%;
+    margin: auto;
+}
+
+.carte-actualite img {
+    width: 100%;
+    object-fit: contain;
+}
+
+
+@media screen and (max-width: 925px) {
+    .carte-actualite {
+        display: block;
+        padding: var(--spacing-M);
+    }
+
+    .carte-actualite>* {
+        width: 100%;
+    }
+
+    .carte-actualite h2 {
+        font-size: var(--L);
+        margin: 0 0 var(--spacing-S) 0;
+        text-align: center;
+    }
+
+    .carte-actualite span{
+        display: block;
+        text-align: center;
+        font-size: var(--S);
+    }
+
+    .carte-actualite p {
+        font-size: var(--M);
+        margin-bottom: var(--spacing-S);
+    }
+
+    .carte-actualite a {
+       margin-bottom: var(--spacing-S);
+    }
+
+    .carte-actualite .texte-avant {
+        margin-right: auto;
+    }
+    
+    .carte-actualite .texte-apres {
+        margin-top: var(--spacing-S);
+        margin-left: auto;
+    }
+}

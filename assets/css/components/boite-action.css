@@ -1,0 +1,69 @@
+/*Les boîtes d'appel à l'action*/
+
+.boite-action {
+    background-color: var(--palebeige);
+    padding: var(--spacing-XL);
+    text-align: center;
+}
+
+.boite-action h1 {
+    font-size: var(--XL);
+    margin-top: auto;
+}
+
+.boite-action p {
+    font-size: var(--LL);
+    margin-bottom: var(--spacing-L);
+}
+
+.boite-action .btns-box-souhait {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    gap: var(--spacing-L);
+}
+
+.boite-action input {
+    margin-bottom: var(--spacing-M);
+    padding: var(--spacing-S);
+    text-align: center;
+    min-width: 400px;
+    font-size: var(--M);
+}
+
+.boite-action .btns-box-abonnement input::placeholder {
+    text-align: center;
+    font-size: var(--M);
+}
+
+.boite-action .btns-box-abonnement>* {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.boite-action .btns-box>button {
+    width: 260px;
+}
+
+@media screen and (max-width: 925px) {
+    .boite-action {
+        padding: var(--spacing-M);
+    }
+
+    .boite-action h1 {
+        font-size: var(--LL);
+    }
+
+    .boite-action p {
+        font-size: var(--L);
+        margin-bottom: var(--spacing-S);
+    }
+
+    .boite-action input {
+        margin-bottom: var(--spacing-S);
+        padding: var(--spacing-XS);
+        min-width: 300px;
+    }
+    
+}

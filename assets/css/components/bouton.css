@@ -1,0 +1,49 @@
+/*Stylisation des différents boutons*/
+
+.btn {
+    font-size: var(--M);
+    background-color: var(--oldred);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 40px;
+    cursor: pointer;
+}
+
+.btn:hover,
+.btn-big:hover {
+    background-color: var(--oldblue);
+}
+
+.magnifyer-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+    margin-left: -33px;
+    padding-top: 5px;
+}
+
+.magnifyer-btn img {
+    width: 25px;
+    object-fit: cover;
+}
+
+.btn-big {
+    font-size: var(--L);
+    background-color: var(--oldred);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    padding: var(--spacing-S) var(--spacing-M);
+    width: 280px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 925px) {
+
+    .btn-big {
+        font-size: var(--M);
+        padding: var(--spacing-XS) var(--spacing-S);
+        width: 200px;
+    }
+}

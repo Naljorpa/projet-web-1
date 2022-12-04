@@ -1,0 +1,187 @@
+/*Fiche enchère de la page fiche*/
+
+.background-fiche {
+    margin: var(--spacing-XL)
+}
+
+.fiche-enchere {
+    background-color: var(--palebeige);
+    padding: var(--spacing-M);
+}
+
+
+
+.fiche-enchere p, .fiche-enchere
+dl {
+    font-size: var(--M);
+}
+
+.fiche-enchere dd {
+    font-weight: 600;
+}
+
+.fiche-enchere a {
+    font-size: var(--M);
+    text-decoration: none;
+    align-self: center;
+}
+
+.fiche-enchere a:hover {
+    color: var(--oldred);
+    text-decoration: underline;
+}
+
+
+
+.fiche-enchere .estime {
+    font-size: var(--L);
+}
+
+.fiche-enchere h1,
+.fiche-enchere .pays-titre {
+    font-size: var(--LL);
+}
+
+.fiche-enchere .temps {
+    justify-content: space-between;
+}
+
+.fiche-enchere .temps span:last-of-type {
+    color: var(--oldred);
+    font-weight: 600;
+}
+
+.fiche-enchere .mise {
+    /* justify-content: space-evenly; */
+    margin-top: var(--spacing-S);
+    margin-bottom: var(--spacing-S);
+}
+
+.fiche-enchere .mise-dep-actu p {
+    margin: 0;
+}
+
+
+
+.fiche-enchere input {
+    margin: auto 0 auto auto;
+    padding: var(--spacing-XS);
+}
+
+
+.fiche-enchere .image-mise {
+    display: flex;
+    gap: var(--spacing-S);
+    border-bottom: 1px solid var(--oldblue);
+    padding-bottom: var(--spacing-M);
+}
+
+.fiche-enchere .miser-suivre {
+    margin-top: var(--spacing-S);
+    justify-content: space-between;
+}
+
+.fiche-enchere button {
+    width: 200px;
+}
+
+.fiche-enchere .zone-detail-mise {
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fiche-enchere .description {
+    justify-content: space-between;
+    margin-top: var(--spacing-M);
+    gap: var(--spacing-S);
+}
+
+.fiche-enchere .description div {
+    flex-basis: 45%;
+}
+
+.fiche-enchere .specification {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-S);
+}
+
+.fiche-enchere .specification div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fiche-enchere .specification dd {
+    display: inline;
+}
+
+.fiche-enchere .specification dt {
+    display: inline;
+}
+
+@media screen and (max-width: 700px) {
+
+    .background-fiche {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .fiche-enchere .galerie-carrousel {
+        flex-direction: column-reverse;
+    }
+
+    .fiche-enchere .carrousel img {
+        width: 100%;
+    }
+
+    .fiche-enchere .zone-image-secondaire {
+        display: flex;
+        gap: var(--spacing-XS);
+    }
+
+    .fiche-enchere .titre-description h1,
+    .fiche-enchere .titre-description .pays-titre {
+        font-size: var(--L);
+    }
+
+    .fiche-enchere .titre-description p,
+    .fiche-enchere .mise {
+        margin-top: var(--spacing-XS);
+    }
+
+    .fiche-enchere  .mise {
+        display: block;
+    }
+
+    .fiche-enchere input {
+        margin-top: var(--spacing-XS);
+    }
+
+    .fiche-enchere button {
+        margin-bottom: var(--spacing-XS);
+    }
+}
+
+@media screen and (max-width: 925px) {
+    .fiche-enchere .image-mise {
+        flex-direction: column;
+    }
+
+    .fiche-enchere .carrousel section {
+        justify-content: flex-end;
+    }
+
+    .fiche-enchere .carrousel img {
+        width: 100%;
+    }
+
+    .fiche-enchere .galerie-carrousel {
+        justify-content: space-between;
+    }
+
+    .fiche-enchere .description {
+        flex-direction: column;
+    }
+
+}

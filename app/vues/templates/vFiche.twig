@@ -1,0 +1,203 @@
+<section class="fiche-enchere">
+	<div class="image-mise">
+		<aside class="galerie-carrousel flexer">
+			<div class="zone-image-secondaire">
+				<a href="#timbre1"><img src="/assets/images/timbres/green-stamp-india.jpg" alt="image secondaire"></a>
+				<a href="#timbre2"><img src="/assets/images/timbres/back-green-stamp.jpg" alt="image secondaire"></a>
+			</div>
+			<div class="zone-image-principal carrousel">
+				<div>
+					<section id="timbre1">
+						<img src="/assets/images/timbres/green-stamp-india.jpg" alt="image principale"></section>
+					<section id="timbre2">
+						<img src="/assets/images/timbres/back-green-stamp.jpg" alt="image principale"></section>
+				</div>
+			</div>
+		</aside>
+
+		<div class="zone-detail-mise">
+			<div class="titre-description">
+				<h1>{{ fiche.timbre_nom }}</h1>
+				<p class="pays-titre">{{ fiche.pays_nom|upper }}</p>
+			</div>
+			<div>
+				<p class="temps flexer">
+					<span>Temps restant:</span>
+					<span>{{ fiche.enchere_date_fin }}</span>
+				</p>
+			</div>
+			<form action="post">
+				<div class="mise flexer">
+					<div class="mise-dep-actu">
+						<p>Mise de départ:
+							<span class="bold600">{{ fiche.enchere_prix_base }}$</span>
+						</p>
+						<p>Mise actuelle:
+							<span class="bold600 text-red">{{ fiche.mise_valeur }}$</span>
+						</p>
+					</div>
+					<label hidden for="mise">Mise</label>
+					<input type="text" id="mise" placeholder="$">
+				</div>
+				<div class="miser-suivre flexer">
+					<button class="btn">Misez</button>
+					<a href="#">Suivre cette enchère »</a>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="description flexer">
+		<div>
+			<h2>Description</h2>
+			<p>{{ fiche.timbre_description }}</p>
+			<h2>Histoire</h2>
+			<p>{{ fiche.timbre_histoire }}
+			</p>
+		</div>
+		<div>
+			<h2>Spécifications</h2>
+			<dl class="specification">
+				<div>
+					<dt>Pays:</dt>
+					<dd>{{ fiche.pays_nom|capitalize }}</dd>
+				</div>
+				<div>
+					<dt>Numéro de catalogue:</dt>
+					<dd>{{ fiche.timbre_id }}</dd>
+				</div>
+				<div>
+					<dt>Tirage:</dt>
+					<dd>{{ fiche.timbre_tirage }}</dd>
+				</div>
+				<div>
+					<dt>Condition:</dt>
+					<dd>{{ fiche.condition_name|capitalize}}</dd>
+				</div>
+				<div>
+					<dt>Format de timbre:</dt>
+					<dd>{{ fiche.timbre_dimension }}</dd>
+				</div>
+				<div>
+					<dt>Année de délivrance:</dt>
+					<dd>{{ fiche.timbre_annee }}</dd>
+				</div>
+				<div>
+					<dt>Certifié</dt>
+					<dd>
+						{% if (fiche_timbre_certification == 1) %}
+						Oui
+						{% endif %}
+						{% if (fiche_timbre_certification == 0) %}
+						Non
+						{% endif %}
+					</dd>
+				</div>
+			</dl>
+		</div>
+
+	</div>
+</section>
+<section class="encheres-similaires">
+	<h1>Enchères similiares</h1>
+
+	<div class="chaine-cartes flexer">
+		<article class="card">
+			<picture>
+				<img src="assets/images/timbres/george1.jpg" alt="">
+			</picture>
+			<a href="fiche.html">
+				<h1>VF+ MH 1912 Canadian KGV Stamp, Scott #111</h1>
+			</a>
+			<hr>
+			<small class="temps">
+				<span>Temps Restant:
+				</span>
+				<span>10j 12:00:58</span>
+			</small>
+			<div class="mise">
+				<div class="depart-actuel">
+					<small>Départ: 100$</small>
+					<small>Actuel:
+						<span class="text-red">204$</span>
+					</small>
+				</div>
+				<input type="text" placeholder="$">
+			</div>
+			<button type="submit" class="btn">Miser</button>
+		</article>
+		<article class="card">
+			<picture>
+				<img src="assets/images/timbres/queen1.jpg" alt="">
+			</picture>
+			<a href="fiche.html">
+				<h1>MNH 8 1/2c Nova Scotia, 1860 Canada -- Scott #11</h1>
+			</a>
+			<hr>
+			<small class="temps">
+				<span>Temps Restant:
+				</span>
+				<span>10j 12:00:58</span>
+			</small>
+			<div class="mise">
+				<div class="depart-actuel">
+					<small>Départ: 100$</small>
+					<small>Actuel:
+						<span class="text-red">204$</span>
+					</small>
+				</div>
+				<input type="text" placeholder="$">
+			</div>
+			<button type="submit" class="btn">Miser</button>
+		</article>
+		<article class="card">
+			<i class="favoris"><img title="Favoris du Lord" src="assets/images/icones/favorite.svg" alt=""></i>
+			<picture>
+				<img src="assets/images/timbres/james-hill.jpg" alt="">
+			</picture>
+			<a href="fiche.html">
+				<h1>MH Canadian XF KGV Overprint Stamp, #139</h1>
+			</a>
+			<hr>
+			<small class="temps">
+				<span>Temps Restant:
+				</span>
+				<span>10j 12:00:58</span>
+			</small>
+			<div class="mise">
+				<div class="depart-actuel">
+					<small>Départ: 100$</small>
+					<small>Actuel:
+						<span class="text-red">204$</span>
+					</small>
+				</div>
+				<input type="text" placeholder="$">
+			</div>
+			<button type="submit" class="btn">Miser</button>
+		</article>
+		<article class="card">
+			<picture>
+				<img src="assets/images/timbres/serie-timbre.jpg" alt="">
+			</picture>
+			<a href="fiche.html">
+				<h1>TANGANYIKA 1922 SG83/88 Mint Giraffe</h1>
+			</a>
+			<hr>
+			<small class="temps">
+				<span>Temps Restant:
+				</span>
+				<span>10j 12:00:58</span>
+			</small>
+			<div class="mise">
+				<div class="depart-actuel">
+					<small>Départ: 100$</small>
+					<small>Actuel:
+						<span class="text-red">204$</span>
+					</small>
+				</div>
+				<input type="text" placeholder="$">
+			</div>
+			<button type="submit" class="btn">Miser</button>
+		</article>
+	</div>
+
+</section>

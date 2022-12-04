@@ -1,0 +1,56 @@
+/*Carrousel intégré dans la fiche enchere*/
+
+.fiche-enchere picture {
+    margin: 0;
+}
+
+.fiche-enchere .zone-image-secondaire{
+    flex-basis: 20%;
+}
+
+.fiche-enchere .zone-image-principal img{
+    cursor: zoom-in;
+    transition: scale 200ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.fiche-enchere .zone-image-principal img:hover{
+    scale: 2;
+    transition-duration: 800ms, 1200ms;
+}
+
+.galerie-carrousel{
+    gap: var(--spacing-S);
+    flex-basis:50%
+}
+.carrousel{
+   flex-basis: 70%;
+}
+
+.carrousel div {
+   display: flex;
+   overflow-x: auto;
+   scroll-snap-type: x mandatory;
+   scroll-behavior: smooth;
+}
+
+.carrousel section {
+   display: flex;
+   flex-basis: 100%;
+   width: 100%; /* bug dans FF rend le width nécessaire */
+   flex-shrink: 0;
+   scroll-snap-align: start;
+}
+
+.carrousel img {
+   object-fit: cover;
+   object-position: top center;
+   width: 30vw;
+}
+
+.carrousel div::-webkit-scrollbar { /* Chrome, Safari, Edge */
+   display: none;
+}
+
+.carrousel section{
+   scroll-margin-top: 320px;
+}

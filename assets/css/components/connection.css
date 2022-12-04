@@ -1,0 +1,18 @@
+.connection h1{
+    margin-top: var( --spacing-M);
+    margin-bottom: var(--spacing-S);
+}
+
+.connection span {
+    display: block;
+}
+
+.connection label{
+    display: block;
+    margin-bottom: var(--spacing-XXS);
+}
+
+.connection input{
+    display: block;
+    margin-bottom: var(--spacing-XS);
+}

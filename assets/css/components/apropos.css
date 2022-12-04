@@ -1,0 +1,54 @@
+/* A propos du Lord*/
+
+
+.lord-stampee {
+    display: flex;
+}
+
+.lord-stampee .the-lord p {
+    margin: var(--spacing-M) var(--spacing-M) var(--spacing-S) var(--spacing-M);
+}
+
+.lord-stampee .the-lord i {
+    font-size: var(--M);
+    margin-left: var(--spacing-M);
+}
+
+
+.lord-stampee picture {
+    margin: 0;
+    width: calc(100vw/3);
+}
+
+.lord-stampee .the-text {
+    margin-left: var(--spacing-M);
+    font-size: var(--L);
+}
+
+.lord-stampee .the-text p:first-child {
+    margin-top: 0;
+}
+
+@media screen and (max-width: 925px) {
+
+    .lord-stampee {
+        display: block;
+    }
+
+    .lord-stampee .the-lord {
+        margin-bottom: var(--spacing-S);
+    }
+
+    .lord-stampee .the-lord p {
+        margin: var(--spacing-S) 0;
+    }
+
+    .lord-stampee picture {
+        width: 100%;
+        text-align: center;
+    }
+
+    .lord-stampee .the-text {
+        margin: 0;
+    }
+}

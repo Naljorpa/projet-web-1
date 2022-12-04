@@ -1,0 +1,18 @@
+.inscription h1{
+    margin-top: var( --spacing-M);
+    margin-bottom: var(--spacing-S);
+}
+
+.inscription span {
+    display: block;
+}
+
+.inscription label{
+    display: block;
+    margin-bottom: var(--spacing-XXS);
+}
+
+.inscription input{
+    display: block;
+    margin-bottom: var(--spacing-XS);
+}

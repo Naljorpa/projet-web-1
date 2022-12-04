@@ -1,0 +1,74 @@
+/*Les fiches avec texte en gros sur la page index*/
+
+
+.fiche-big-text {
+    display: flex;
+}
+
+.fiche-big-text>* {
+    width: 50%;
+}
+
+.fiche-big-text picture {
+    flex: 1;
+    width: 100%;
+    margin: auto;
+}
+
+.fiche-big-text img {
+    object-fit: contain;
+}
+
+.fiche-big-text div {
+    flex: 1;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.fiche-big-text p {
+    font-size: var(--LL);
+    margin-top: 0;
+    margin-left: var(--spacing-M);
+    margin-bottom: var(--spacing-M);
+}
+
+.fiche-big-text a {
+    font-size: var(--LL);
+    color: var(--oldblue);
+    margin-left: var(--spacing-M);
+    text-decoration: none;
+}
+
+.fiche-big-text a:hover {
+    color: var(--oldred);
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 925px) {
+    .fiche-big-text {
+        display: block;
+    }
+
+    .fiche-big-text>* {
+        width: 100%;
+    }
+
+    .fiche-big-text div {
+        margin-top: var(--spacing-S);
+        margin-bottom: var(--spacing-S);
+    }
+
+    .fiche-big-text p {
+        font-size: var(--L);
+        margin: 0;
+        text-align: center;
+    }
+
+    .fiche-big-text a {
+        font-size: var(--M);
+        margin-top: var(--spacing-S);
+        margin-left: 0;
+        display: block;
+        text-align: right;
+    }
+}
