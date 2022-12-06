@@ -230,30 +230,43 @@
 	<div class="grid-encheres">
 		{% for enchere in encheres %}
 
-		<article class="card">
-			<picture>
-				<img src="{{ enchere.image_lien }}" alt=" {{ enchere.image_nom }} ">
-			</picture>
-			<a href="fiche?enchere_id={{ enchere.enchere_id }}">
-				<h1>{{ enchere.timbre_nom }}</h1>
-			</a>
-			<hr>
-			<small class="temps">
-				<span>Temps Restant:
-				</span>
-				<span>{{ enchere.enchere_date_fin }}</span>
-			</small>
-			<div class="mise">
-				<div class="depart-actuel">
-					<small>Départ: {{ enchere.enchere_prix_base }}$</small>
-					<small>Actuel:
-						<span class="text-red">{{ enchere.mise_valeur }}$</span>
-					</small>
-				</div>
-				<input type="text" placeholder="$">
-			</div>
-			<button type="submit" class="btn">Miser</button>
-		</article>
+			<article class="card">
+				<picture>
+					<img src="{{ enchere.image_lien }}" alt=" {{ enchere.image_nom }} ">
+				</picture>
+				<a href="fiche?enchere_id={{ enchere.enchere_id }}">
+					<h1>{{ enchere.timbre_nom }}</h1>
+				</a>
+				<hr>
+				<small class="temps">
+					<span>Temps Restant:
+					</span>
+					<span>{{ enchere.enchere_date_fin }}</span>
+				</small>
+				<form  method="POST" action="admin?entite=mise&action=a">
+					<div class="mise">
+						<div class="depart-actuel">
+							<small>Départ:
+								{{ enchere.enchere_prix_base }}$</small>
+							<small>Actuel:
+								<span class="text-red">{{ enchere.mise_valeur }}$</span>
+							</small>
+						</div>
+						<input type="hidden" name="enchere_id" value="{{ enchere.enchere_id }}">
+						<input type="hidden" name="utilisateur_id" value="{{ session.oUtilisateur.utilisateur_id }}">
+						<input type="number" name="mise_valeur" placeholder="$" value="{{ mise.mise_valeur }}">
+						
+					</div>
+					<span class="erreur">{{ erreurs.mise_valeur }}</span>
+					{% if session.oUtilisateur is defined %}
+					<input type="submit" class="btn" value="Miser">
+					<span>&nbsp;{{ succes }}</span>
+					{% endif %}
+					{% if session.oUtilisateur is null %}
+					<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>
+					{% endif %}
+				</form>
+			</article>
 		{% endfor %}
 
 

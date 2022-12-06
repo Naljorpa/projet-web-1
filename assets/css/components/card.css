@@ -100,3 +100,14 @@
 .card .favoris:hover{
     cursor: pointer;  
 }
+
+.card .connect-enchere{
+    display: block;
+    margin-top: var(--spacing-XS);
+}
+
+.card .erreur{
+    display: block;
+    color: var(--oldred);
+    margin-top: var(--spacing-XS);
+}

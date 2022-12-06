@@ -31,7 +31,7 @@ class GestionCourriel
         'oUtilisateur' => $oUtilisateur
         // 'headers'      => $headers
       ],
-      'gabarit-courriel',
+      'gabarit-frontend',
       true
     );
 
@@ -45,7 +45,7 @@ class GestionCourriel
     } else {
       $headers = 'MIME-Version: 1.0' . "\n";
       $headers .= 'Content-Type: text/html; charset=utf-8' . "\n";
-      $headers .= 'From: Le Méliès <support@lemelies.com>' . "\n";
+      $headers .= 'From: Lord Stampee <support@stampee.com>' . "\n";
       mail($destinataire, $objetCourriel, $message, $headers);
     }
   }

@@ -2,15 +2,16 @@
 	<div class="image-mise">
 		<aside class="galerie-carrousel flexer">
 			<div class="zone-image-secondaire">
-				<a href="#timbre1"><img src="/assets/images/timbres/green-stamp-india.jpg" alt="image secondaire"></a>
-				<a href="#timbre2"><img src="/assets/images/timbres/back-green-stamp.jpg" alt="image secondaire"></a>
+				{% for image in images %}
+					<a href="#timbre{{ loop.index }}"><img src="{{ image.image_lien }}" alt="{{ image.image_name }}"></a>
+				{% endfor %}
 			</div>
 			<div class="zone-image-principal carrousel">
 				<div>
-					<section id="timbre1">
-						<img src="/assets/images/timbres/green-stamp-india.jpg" alt="image principale"></section>
-					<section id="timbre2">
-						<img src="/assets/images/timbres/back-green-stamp.jpg" alt="image principale"></section>
+					{% for image in images %}
+					<section id="timbre{{ loop.index }}">
+						<img src="{{ image.image_lien }}" alt="{{ image.image_name }}"></section>
+					{% endfor %}	
 				</div>
 			</div>
 		</aside>
@@ -85,10 +86,10 @@
 					<dt>Certifié</dt>
 					<dd>
 						{% if (fiche_timbre_certification == 1) %}
-						Oui
+							Oui
 						{% endif %}
 						{% if (fiche_timbre_certification == 0) %}
-						Non
+							Non
 						{% endif %}
 					</dd>
 				</div>

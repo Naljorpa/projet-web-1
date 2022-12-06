@@ -32,21 +32,23 @@
 							<img src="assets/images/icones/account.svg" alt="compte">
 						</li>
 						{% if session.oUtilisateur is defined %}
-						<li>Bienvenue 
-							{{ oUtilisateur.utilisateur_prenom }}
-							{{ oUtilisateur.utilisateur_nom }}
-							<a href="admin?entite=utilisateur&action=d">Déconnecter</a>
-						</li>
+							<li>Bienvenue
+								<a href="profile">
+									{{ oUtilisateur.utilisateur_prenom }}
+									{{ oUtilisateur.utilisateur_nom }}
+								</a>
+								<a href="admin?entite=utilisateur&action=d">Déconnecter</a>
+							</li>
 						{% else %}
-						<li>
-							<a href="connexion">Connection</a>
-						</li>
-						<li class="separateur">/</li>
-						<li>
-							<a href="inscription">Inscription</a>
-						</li>
+							<li>
+								<a href="connexion">Connection</a>
+							</li>
+							<li class="separateur">/</li>
+							<li>
+								<a href="inscription">Inscription</a>
+							</li>
 						{% endif %}
-						
+
 						<li>
 							<a href="#">Fr</a>
 						</li>
@@ -155,7 +157,7 @@
 			</nav>
 			<div class="footer-du-footer">
 				<p>1840 First Stamp highroad, Worchestercherwerrershire Manors county,
-					                somewhere-by-in-the-United-Kingdom-of-Britain, h1G 1Y6</p>
+															                somewhere-by-in-the-United-Kingdom-of-Britain, h1G 1Y6</p>
 				<p>© 2022 Lord Reginald Stampee III Inc. Co. All rights reserved and evermore.</p>
 			</div>
 		</footer>

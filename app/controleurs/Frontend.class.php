@@ -8,7 +8,6 @@
 class Frontend extends Routeur
 {
 
-  // private $film_id;
 
   /**
    * Constructeur qui initialise des propriétés à partir du query string
@@ -28,7 +27,7 @@ class Frontend extends Routeur
    */
   public function accueil()
   {
-    if(isset($_SESSION['oUtilisateur'])){
+    if (isset($_SESSION['oUtilisateur'])) {
       $session = $_SESSION['oUtilisateur'];
     } else {
       $session = null;
@@ -44,6 +43,11 @@ class Frontend extends Routeur
     );
   }
 
+  /**
+   * Affiche la page d'inscription
+   * 
+   */
+
   public function inscription()
   {
     (new Vue)->generer(
@@ -54,6 +58,11 @@ class Frontend extends Routeur
       "gabarit-frontend"
     );
   }
+
+  /**
+   * Affiche la page de connection
+   * 
+   */
 
   public function connexion()
   {
@@ -66,6 +75,36 @@ class Frontend extends Routeur
     );
   }
 
+   /**
+   * Affiche la page de connection
+   * 
+   */
+
+  public function afficherProfile()
+  {
+
+    $pays = $this->oRequetesSQL->getPays();
+    $condition =  $this->oRequetesSQL->getCondition();
+    $status =  $this->oRequetesSQL->getStatus();
+
+    if (isset($_SESSION['oUtilisateur'])) {
+      $session = $_SESSION['oUtilisateur'];
+    } else {
+      $session = null;
+    }
+
+    (new Vue)->generer(
+      'vProfile',
+      array(
+        'oUtilisateur'        =>  $session,
+        'titre'               => 'Profile d\'utilisateur',
+        'pays'                => $pays,
+        'condition'           => $condition,
+        'status'           => $status
+      ),
+      'gabarit-frontend'
+    );
+  }
   /**
    * Lister les enchères
    * 
@@ -74,7 +113,7 @@ class Frontend extends Routeur
   {
     $encheres = $this->oRequetesSQL->getEncheres();
 
-    if(isset($_SESSION['oUtilisateur'])){
+    if (isset($_SESSION['oUtilisateur'])) {
       $session = $_SESSION['oUtilisateur'];
     } else {
       $session = null;
@@ -85,76 +124,39 @@ class Frontend extends Routeur
       array(
         'titre'  => "Enchères",
         'oUtilisateur'        =>  $session,
-        'encheres' => $encheres 
+        'encheres' => $encheres
       ),
       "gabarit-frontend"
     );
   }
 
+
+  /**
+   *  Affiche la fiche d'un timbre
+   * 
+   */
   public function afficherFiche()
   {
     $fiche = false;
     if (!is_null($this->enchere_id)) {
       $fiche = $this->oRequetesSQL->getFiche($this->enchere_id);
+      $images = $this->oRequetesSQL->getImages($this->enchere_id);
     }
     if (!$fiche) throw new Exception("Fiche timbre inexistante.");
 
-    if(isset($_SESSION['oUtilisateur'])){
+    if (isset($_SESSION['oUtilisateur'])) {
       $session = $_SESSION['oUtilisateur'];
     } else {
       $session = null;
     }
-
-    echo '<pre>',print_r($fiche),'</pre>';
 
     (new Vue)->generer(
       "vFiche",
       array(
         'titre'  => "Fiche",
         'oUtilisateur'        =>  $session,
-        'fiche' => $fiche
-      ),
-      "gabarit-frontend"
-    );
-  }
-
-  /**
-   * Voir les informations d'un film
-   * 
-   */
-  public function voirFilm()
-  {
-    $film = false;
-    if (!is_null($this->film_id)) {
-      $film = $this->oRequetesSQL->getFilm($this->film_id);
-      $realisateurs = $this->oRequetesSQL->getRealisateursFilm($this->film_id);
-      $pays         = $this->oRequetesSQL->getPaysFilm($this->film_id);
-      $acteurs      = $this->oRequetesSQL->getActeursFilm($this->film_id);
-
-      // si affichage avec vFilm2.twig
-      // =============================
-      // $seances      = $this->oRequetesSQL->getSeancesFilm($this->film_id); 
-
-      // si affichage avec vFilm.twig
-      // ============================
-      $seancesTemp  = $this->oRequetesSQL->getSeancesFilm($this->film_id);
-      $seances = [];
-      foreach ($seancesTemp as $seance) {
-        $seances[$seance['seance_date']]['jour']     = $seance['seance_jour'];
-        $seances[$seance['seance_date']]['heures'][] = $seance['seance_heure'];
-      }
-    }
-    if (!$film) throw new Exception("Film inexistant.");
-
-    (new Vue)->generer(
-      "vFilm",
-      array(
-        'titre'        => $film['film_titre'],
-        'film'         => $film,
-        'realisateurs' => $realisateurs,
-        'pays'         => $pays,
-        'acteurs'      => $acteurs,
-        'seances'      => $seances
+        'fiche' => $fiche,
+        'images' => $images
       ),
       "gabarit-frontend"
     );

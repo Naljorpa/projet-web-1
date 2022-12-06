@@ -31,7 +31,7 @@ class Admin extends Routeur
       ],
       's' => [
         'nom' => 'supprimerUtilisateur',
-        // 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]
+        'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]
       ],
       'd' => [
         'nom' => 'deconnecter'
@@ -42,31 +42,21 @@ class Admin extends Routeur
       ]
     ],
 
-    'film' => [
-      'l' => [
-        'nom' => 'listerFilms',
-        // 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]
-      ],
+    'mise' => [
       'a' => [
-        'nom' => 'ajouterFilm',
-        'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]
+        'nom' => 'ajouterMise'
       ],
-      'm' =>  [
-        'nom' => 'modifierFilm',
-        // 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]
-      ],
-      's' => [
-        'nom' => 'supprimerFilm',
-        // 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]
+      'l' => [
+        'nom' => 'listerMise'
+      ]
+    ],
+
+    'timbre' => [
+      'a' => [
+        'nom' => 'ajouterTimbre'
       ]
     ]
   ];
-
-
-
-
-
-
 
   private $classRetour = "fait";
   private $messageRetourAction = "";
@@ -88,7 +78,6 @@ class Admin extends Routeur
    */
   public function gererAdmin()
   {
-    echo '<pre>', print_r($_POST), '</pre>';
     if (isset($_SESSION['oUtilisateur'])) {
       $this->oUtilisateur = $_SESSION['oUtilisateur'];
       if (isset($this->methodes[$this->entite])) {
@@ -104,7 +93,8 @@ class Admin extends Routeur
             }
             throw new Exception(self::FORBIDDEN);
           } else {
-            $this->$methode();
+            //possiblement enlev/ la session  dans methode utiliser pour debug
+            $this->$methode($_SESSION['oUtilisateur']);
           }
         } else {
           throw new Exception("L'action $this->action de l'entité $this->entite n'existe pas.");
@@ -185,34 +175,17 @@ class Admin extends Routeur
     if (ENV === "DEV") echo "<a href=\"$retour\">Message dans le fichier $retour</a>";
   }
 
-  /**
-   * Function pour génère la une vue pour l'éditeur qui n'affiche que le gabarit latéral.
-   */
-  public function gestionFilms()
-  {
-
-    (new Vue)->generer(
-      'vGestionFilms',
-      array(
-        'oUtilisateur'        => $this->oUtilisateur,
-        'titre'               => 'Gestion des films',
-        'classRetour'         => $this->classRetour,
-        'messageRetourAction' => $this->messageRetourAction
-      ),
-      'gabarit-admin'
-    );
-  }
-
 
   /**
-   * Lister les utilisateurs
+   * Affiche le profile de l'utilisateur
    */
   public function profileUtilisateur($oUtilisateur)
   {
+    $pays = $this->oRequetesSQL->getPays();
+    $condition =  $this->oRequetesSQL->getCondition();
+    $status =  $this->oRequetesSQL->getStatus();
 
-    echo '<pre>', print_r($oUtilisateur), '</pre>';
-
-    if(isset($this->oUtilisateur)){
+    if (isset($this->oUtilisateur)) {
       $oUtilisateur = $this->oUtilisateur;
     } else {
       $oUtilisateur = $oUtilisateur;
@@ -223,11 +196,13 @@ class Admin extends Routeur
       array(
         'oUtilisateur'        => $oUtilisateur,
         'titre'               => 'Profile d\'utilisateur',
-        // 'utilisateur'        => $utilisateur,
+        'pays'                => $pays,
+        'condition'           => $condition,
+        'status'              => $status,
         'classRetour'         => $this->classRetour,
         'messageRetourAction' => $this->messageRetourAction
       ),
-      'gabarit-admin'
+      'gabarit-frontend'
     );
   }
 
@@ -241,7 +216,9 @@ class Admin extends Routeur
     if (count($_POST) !== 0) {
       // retour de saisie du formulaire
       $utilisateur = $_POST;
+    
       $oUtilisateur = new Utilisateur($utilisateur); // création d'un objet Utilisateur pour contrôler la saisie
+   
       $erreurs = $oUtilisateur->erreurs;
       if (count($erreurs) === 0) {
         $oUtilisateur->verifie_courriel($oUtilisateur);
@@ -287,7 +264,7 @@ class Admin extends Routeur
   }
 
   /**
-   * Modifier un auteur identifié par sa clé dans la propriété auteur_id
+   * Modifier un auteur identifié par sa clé dans la propriété utilisateur_id
    */
   public function modifierUtilisateur()
   {
@@ -332,7 +309,7 @@ class Admin extends Routeur
         'utilisateur'       => $utilisateur,
         'erreurs'      => $erreurs
       ),
-      'gabarit-admin'
+      'gabarit-frontend'
     );
   }
 
@@ -352,117 +329,144 @@ class Admin extends Routeur
     $this->profileUtilisateur($this->utilisateur_id);
   }
 
-  public function listerFilms()
-  {
-    $utilisateurs = $this->oRequetesSQL->getUtilisateurs();
 
+
+
+
+  public function ajouterMise()
+  {
+
+    if (isset($_SESSION['oUtilisateur'])) {
+      $session = $_SESSION['oUtilisateur'];
+    } else {
+      $session = null;
+    }
+
+    $enchere_id = $_POST["enchere_id"];
+
+    $encheres = $this->oRequetesSQL->getEncheres();
+
+    $miseActuelle = $this->oRequetesSQL->getMise($enchere_id);
+
+
+
+    $mise = [];
+    $erreurs = [];
+    $nouvelleMise = [];
+    $succes = "";
+
+
+    if (count($_POST) !== 0) {
+      $mise = $_POST;
+      $oMise = new Mise($mise);
+      $erreurs = $oMise->erreurs;
+
+
+      if (count($erreurs) === 0) {
+        $nouvelleMise = $this->oRequetesSQL->ajouterMise([
+          'mise_utilisateur_id'    => $oMise->mise_utilisateur_id,
+          'mise_enchere_id' => $oMise->mise_enchere_id,
+          'mise_valeur' => $oMise->mise_valeur
+        ]);
+        $succes = "Mise réalisée avec succès";
+        if ($nouvelleMise > 0) { // test de la clé de l'utilisateur ajouté
+          $succes = "Mise réalisée avec succès";
+        }
+      }
+      $encheres = $this->oRequetesSQL->getEncheres();
+    }
     (new Vue)->generer(
-      'vAdminDev',
+      'vEncheres',
       array(
-        'oUtilisateur'        => $this->oUtilisateur,
-        'titre'               => 'Gestion des films',
-        'utilisateurs'        => $utilisateurs,
-        'classRetour'         => $this->classRetour,
-        'messageRetourAction' => $this->messageRetourAction
+        'titre'  => "Enchères",
+        'mise'   => $mise,
+        'oUtilisateur'        =>  $session,
+        'encheres' => $encheres,
+        'succes' => $succes,
+        'erreurs'      => $erreurs
       ),
-      'gabarit-admin'
+      "gabarit-frontend"
     );
   }
 
-  public function listerGenres()
-  {
-    $utilisateurs = $this->oRequetesSQL->getUtilisateurs();
 
+  public function ajouterTimbre()
+  {
+
+    $pays = $this->oRequetesSQL->getPays();
+    $condition =  $this->oRequetesSQL->getCondition();
+    $status =  $this->oRequetesSQL->getStatus();
+
+    $timbre  = [];
+    $erreurs = [];
+    $succes = "";
+
+    if (isset($_SESSION['oUtilisateur'])) {
+      $session = $_SESSION['oUtilisateur'];
+    } else {
+      $session = null;
+    }
+
+
+    if (count($_POST) !== 0) {
+
+      $timbre = $_POST;
+
+      $oTimbre = new Timbre($timbre);
+
+      $erreurs = $oTimbre->erreurs;
+
+
+          if (count($erreurs) === 0) {
+            echo '<pre>', print_r($oTimbre), '</pre>';
+            $timbre_id = $this->oRequetesSQL->ajouterTimbre([
+              'timbre_nom'    => $oTimbre->timbre_nom,
+              'timbre_annee' => $oTimbre->timbre_annee,
+              'timbre_description' => $oTimbre->timbre_description,
+              'timbre_histoire' => $oTimbre->timbre_histoire,
+              'timbre_dimension' => $oTimbre->timbre_dimension,
+              'timbre_certification' => $oTimbre->timbre_certification,
+              'timbre_couleur' => $oTimbre->timbre_couleur,
+              'timbre_tirage' => $oTimbre->timbre_tirage,
+              'timbre_pays_id' => $oTimbre->timbre_pays_id,
+              'timbre_condition_id' => $oTimbre->timbre_condition_id,
+              'timbre_status_id' => $oTimbre->timbre_status_id,
+              'timbre_utilisateur_id' => $oTimbre->timbre_utilisateur_id
+            ]);
+            $succes = "Ajout de timbre réalisée avec succès";
+          } else {
+            (new Vue)->generer(
+              'vProfile',
+              array(
+                'oUtilisateur'        =>  $session,
+                'titre'               => 'Profile d\'utilisateur',
+                'pays'                => $pays,
+                'condition'           => $condition,
+                'status'              => $status,
+                'erreurs'             => $erreurs,
+                'timbre'              => $timbre,  
+                'classRetour'         => $this->classRetour,
+                'messageRetourAction' => $this->messageRetourAction
+              ),
+              'gabarit-frontend'
+            );
+          }
+      
+    }
     (new Vue)->generer(
-      'vAdminDev',
+      'vProfile',
       array(
-        'oUtilisateur'        => $this->oUtilisateur,
-        'titre'               => 'Gestion des genres',
-        'utilisateurs'        => $utilisateurs,
+        'oUtilisateur'        =>  $session,
+        'titre'               => 'Profile d\'utilisateur',
+        'pays'                => $pays,
+        'condition'           => $condition,
+        'status'              => $status,
+        'succes'              => $succes,
+        'erreurs'             => $erreurs,
         'classRetour'         => $this->classRetour,
         'messageRetourAction' => $this->messageRetourAction
       ),
-      'gabarit-admin'
-    );
-  }
-  public function listerRealisateurs()
-  {
-    $utilisateurs = $this->oRequetesSQL->getUtilisateurs();
-
-    (new Vue)->generer(
-      'vAdminDev',
-      array(
-        'oUtilisateur'        => $this->oUtilisateur,
-        'titre'               => 'Gestion des realisateurs',
-        'utilisateurs'        => $utilisateurs,
-        'classRetour'         => $this->classRetour,
-        'messageRetourAction' => $this->messageRetourAction
-      ),
-      'gabarit-admin'
-    );
-  }
-  public function listerActeurs()
-  {
-    $utilisateurs = $this->oRequetesSQL->getUtilisateurs();
-
-    (new Vue)->generer(
-      'vAdminDev',
-      array(
-        'oUtilisateur'        => $this->oUtilisateur,
-        'titre'               => 'Gestion des acteurs',
-        'utilisateurs'        => $utilisateurs,
-        'classRetour'         => $this->classRetour,
-        'messageRetourAction' => $this->messageRetourAction
-      ),
-      'gabarit-admin'
-    );
-  }
-  public function listerPays()
-  {
-    $utilisateurs = $this->oRequetesSQL->getUtilisateurs();
-
-    (new Vue)->generer(
-      'vAdminDev',
-      array(
-        'oUtilisateur'        => $this->oUtilisateur,
-        'titre'               => 'Gestion des pays',
-        'utilisateurs'        => $utilisateurs,
-        'classRetour'         => $this->classRetour,
-        'messageRetourAction' => $this->messageRetourAction
-      ),
-      'gabarit-admin'
-    );
-  }
-  public function listerSeances()
-  {
-    $utilisateurs = $this->oRequetesSQL->getUtilisateurs();
-
-    (new Vue)->generer(
-      'vAdminDev',
-      array(
-        'oUtilisateur'        => $this->oUtilisateur,
-        'titre'               => 'Gestion des seances',
-        'utilisateurs'        => $utilisateurs,
-        'classRetour'         => $this->classRetour,
-        'messageRetourAction' => $this->messageRetourAction
-      ),
-      'gabarit-admin'
-    );
-  }
-  public function listerSalles()
-  {
-    $utilisateurs = $this->oRequetesSQL->getUtilisateurs();
-
-    (new Vue)->generer(
-      'vAdminDev',
-      array(
-        'oUtilisateur'        => $this->oUtilisateur,
-        'titre'               => 'Gestion des salles',
-        'utilisateurs'        => $utilisateurs,
-        'classRetour'         => $this->classRetour,
-        'messageRetourAction' => $this->messageRetourAction
-      ),
-      'gabarit-admin'
+      'gabarit-frontend'
     );
   }
 }

@@ -1,0 +1,36 @@
+
+.profile form label, .profile form input, .profile form select, .profile form textarea, .profile a{
+    display: block;
+    margin-top: var(--spacing-XS);
+}
+
+.profile form>div{
+    display: flex;
+}
+
+.profile form>div div:last-of-type:not(.certification){
+   margin-left: var(--spacing-L);
+}
+
+.profile form .btn{
+    margin-top: var(--spacing-M);
+}
+
+.profile a{
+    margin-top: var(--spacing-XS);
+}
+
+.profile a:hover{
+    text-decoration: underline;
+}
+
+.profile .certification{
+    margin-top: var(--spacing-XS);
+}
+
+.profile .certification label{
+    display: inline;
+}
+.profile .certification input{
+    display: inline;
+}

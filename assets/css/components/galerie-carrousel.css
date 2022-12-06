@@ -6,6 +6,8 @@
 
 .fiche-enchere .zone-image-secondaire{
     flex-basis: 20%;
+    display: flex;
+    flex-direction: column;
 }
 
 .fiche-enchere .zone-image-principal img{

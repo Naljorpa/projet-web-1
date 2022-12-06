@@ -14,11 +14,13 @@ class Routeur
     // --------------------
     ["admin",         "Admin",    "gererAdmin"],
     ["",              "Frontend", "accueil"],
-    ["connexion", "Frontend", "connexion"],
-    ["encheres", "Frontend", "listerEncheres"],
-    ["fiche", "Frontend", "afficherFiche"],
-    ["inscription", "Frontend", "inscription"],
-    ["film",          "Frontend", "voirFilm"]
+    ["index.php",     "Frontend", "accueil"],
+    ["connexion",     "Frontend", "connexion"],
+    ["encheres",      "Frontend", "listerEncheres"],
+    ["fiche",         "Frontend", "afficherFiche"],
+    ["inscription",   "Frontend", "inscription"],
+    ["film",          "Frontend", "voirFilm"],
+    ["profile",       "Frontend", "afficherProfile"]
   ];
 
   protected $oRequetesSQL; // objet RequetesSQL utilisé par tous les contrôleurs

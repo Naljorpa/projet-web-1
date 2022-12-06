@@ -11,7 +11,7 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-		<title>{{titre}}</title>
+		<title>Information</title>
 	</head>
 
 	<body>
@@ -28,15 +28,17 @@
 				<span></span>
 				<nav>
 					<ul class="navigation-secondaire">
-						
 						<li>
 							<img src="assets/images/icones/account.svg" alt="compte">
 						</li>
-						<li>Bienvenue 
-							{{ oUtilisateur.utilisateur_prenom }}
-							{{ oUtilisateur.utilisateur_nom }}
-							<a href="admin?entite=utilisateur&action=d">Déconnecter</a>
-						</li>
+													<li>
+								<a href="connexion">Connection</a>
+							</li>
+							<li class="separateur">/</li>
+							<li>
+								<a href="inscription">Inscription</a>
+							</li>
+						
 						<li>
 							<a href="#">Fr</a>
 						</li>
@@ -50,13 +52,13 @@
 				<nav>
 					<ul class="navigation-principale">
 						<li>
-							<a {% if titre == 'Accueil' %} class="page-active" {% endif %} href="/">Accueil</a>
+							<a  href="/">Accueil</a>
 						</li>
 						<li>
 							<a href="#">Actualités</a>
 						</li>
 						<li>
-							<a {% if titre == 'Enchères' %} class="page-active" {% endif %} href="encheres">Enchères</a>
+							<a  href="encheres">Enchères</a>
 						</li>
 						<li>
 							<a href="#">Archives</a>
@@ -71,7 +73,28 @@
 		<div class="color-bands"></div>
 		<main>
 
-			{{ include(templateMain) }}
+			<section>
+	<p>Bonjour
+		afwafweaf
+		afewf,</p>
+
+	<p>Nous avons le plaisir de vous transmettre votre identifiant de connexion et votre mot de passe pour accéder à l'administration de notre site Stampee Enchères.</p>
+
+	<p>Identifiant:
+		<strong>aewfa@gmail.co</strong>
+	</p>
+	<p>Mot de passe:
+		<strong>s2M2K9v2p7</strong>
+	</p>
+
+	<p>
+		<a href="http://localhost:3000/admin">Cliquez sur ce lien pour accéder à notre interface d'administration</a>
+	</p>
+
+	<p>Cordialement,</p>
+	<p>Support Technique</p>
+</section>
+
 
 		</main>
 		<div class="color-bands-footer"></div>
@@ -145,7 +168,7 @@
 			</nav>
 			<div class="footer-du-footer">
 				<p>1840 First Stamp highroad, Worchestercherwerrershire Manors county,
-										                somewhere-by-in-the-United-Kingdom-of-Britain, h1G 1Y6</p>
+															                somewhere-by-in-the-United-Kingdom-of-Britain, h1G 1Y6</p>
 				<p>© 2022 Lord Reginald Stampee III Inc. Co. All rights reserved and evermore.</p>
 			</div>
 		</footer>

@@ -46,6 +46,64 @@ class Timbre
   public function __get($prop) {
     return $this->$prop;
   }
+
+   // Getters explicites nécessaires au moteur de templates TWIG
+   public function getTimbre_id()
+   {
+     return $this->timbre_id;
+   }
+   public function getTimbre_nom()
+   {
+     return $this->timbre_nom;
+   }
+   public function getTimbre_pays_id()
+   {
+     return $this->timbre_pays_id;
+   }
+   public function getTimbre_annee()
+   {
+     return $this->timbre_annee;
+   }
+   public function getTimbre_description()
+   {
+     return $this->timbre_description;
+   }
+   public function getTimbre_histoire()
+   {
+     return $this->timbre_histoire;
+   }
+   public function getTimbre_dimension()
+   {
+     return $this->timbre_dimension;
+   }
+   public function getTimbre_certification()
+   {
+     return $this->timbre_certification;
+   }
+   public function getTimbre_couleur()
+   {
+     return $this->timbre_couleur;
+   }
+   public function getTimbre_tirage()
+   {
+     return $this->timbre_tirage;
+   }
+   public function getTimbre_condition_id()
+   {
+     return $this->timbre_condition_id;
+   }
+   public function getTimbre_status_id()
+   {
+     return $this->timbre_status_id;
+   }
+   public function getTimbre_utilisateur_id()
+   {
+     return $this->timbre_utilisateur_id;
+   }
+   public function getErreurs()
+   {
+     return $this->erreurs;
+   }
   
   /**
    * Mutateur magique qui exécute le mutateur de la propriété en paramètre 
@@ -69,7 +127,6 @@ class Timbre
       $this->erreurs['timbre_id'] = 'Numéro de timbre incorrect.';
     }
     $this->timbre_id = $timbre_id;
-    return $this;
   }    
 
   /**
@@ -84,8 +141,21 @@ class Timbre
     if (!preg_match($regExp, $timbre_nom)) {
       $this->erreurs['timbre_nom'] = 'Au moins un caractère.';
     }
-    $this->timbre_nom = mb_strtoupper($timbre_nom);
-    return $this;
+    $this->timbre_nom = $timbre_nom;
+  }
+
+     /**
+   * Mutateur de la propriété timbre_pays_id
+   * @param string $timbre_pays_id
+   * @return $this
+   */    
+  public function setTimbre_pays_id($timbre_pays_id) {
+    unset($this->erreurs['timbre_pays_id']);
+    $regExp = '/^[1-9]\d*$/';
+    if (!preg_match($regExp, $timbre_pays_id)) {
+      $this->erreurs['timbre_pays_id'] = 'Doit être un id valide';
+    }
+    $this->timbre_pays_id = $timbre_pays_id;
   }
 
   /**
@@ -100,7 +170,6 @@ class Timbre
       $this->erreurs['timbre_annee'] = "Doit être format valide et avant l'année en cours.";
     }
     $this->timbre_annee = $timbre_annee;
-    return $this;
   }
 
   /**
@@ -116,24 +185,93 @@ class Timbre
       $this->erreurs['timbre_description'] = 'Au moins 5 mots.';
     }
     $this->timbre_description = $timbre_description;
-    return $this;
+  }
+
+
+  /**
+   * Mutateur de la propriété timbre_histoire
+   * @param string $timbre_histoire
+   * @return $this
+   */    
+  public function setTimbre_histoire($timbre_histoire) {
+    unset($this->erreurs['timbre_histoire']);
+    $timbre_histoire = trim($timbre_histoire);
+    $this->timbre_histoire = $timbre_histoire;
   }
 
   /**
-   * Mutateur de la propriété film_affiche
-   * @param string $film_affiche
+   * Mutateur de la propriété timbre_dimension
+   * @param string $timbre_dimension
    * @return $this
    */    
-  // public function setFilm_affiche($film_affiche) {
-  //   unset($this->erreurs['film_affiche']);
-  //   $film_affiche = trim($film_affiche);
-  //   $regExp = '/^.+\.jpg$/';
-  //   if (!preg_match($regExp, $film_affiche)) {
-  //     $this->erreurs['film_affiche'] = "Vous devez téléverser un fichier de type jpg.";
-  //   }
-  //   $this->film_affiche = $film_affiche;
-  //   return $this;
-  // }
+  public function setTimbre_dimension($timbre_dimension) {
+    unset($this->erreurs['timbre_dimension']);
+    $regExp = '/^.+$/';
+    $timbre_dimension = trim($timbre_dimension);
+    if (!preg_match($regExp, $timbre_dimension)) {
+      $this->erreurs['timbre_dimension'] = 'Au moins un caractère.';
+    }
+    $this->timbre_dimension = $timbre_dimension;
+  }
+
+  /**
+   * Mutateur de la propriété timbre_certification
+   * @param string $timbre_certification
+   * @return $this
+   */    
+  public function setTimbre_certification($timbre_certification) {
+    unset($this->erreurs['timbre_certification']);
+    $regExp = '/^[1-9]\d*$/';
+    if (!preg_match($regExp, $timbre_certification)) {
+      $this->erreurs['timbre_certification'] = 'Numéro de certification incorrecte';
+    }
+    $this->timbre_certification = $timbre_certification;
+  }
+
+    /**
+   * Mutateur de la propriété timbre_couleur 
+   * @param string $timbre_couleur
+   * @return $this
+   */    
+  public function setTimbre_couleur($timbre_couleur) {
+    unset($this->erreurs['timbre_couleur']);
+    $timbre_couleur = trim($timbre_couleur);
+    $regExp = '/^.+$/';
+    if (!preg_match($regExp, $timbre_couleur)) {
+      $this->erreurs['timbre_couleur'] = 'Au moins un caractère.';
+    }
+    $this->timbre_couleur = $timbre_couleur;
+   
+  }
+
+   /**
+   * Mutateur de la propriété timbre_tirage
+   * @param string $timbre_tirage
+   * @return $this
+   */    
+  public function setTimbre_tirage($timbre_tirage) {
+    unset($this->erreurs['timbre_tirage']);
+    $regExp = '/^[1-9]\d*$/';
+    if (!preg_match($regExp, $timbre_tirage)) {
+      $this->erreurs['timbre_tirage'] = 'Doit être de valeur numérique';
+    }
+    $this->timbre_tirage = $timbre_tirage;
+
+  }
+
+   /**
+   * Mutateur de la propriété timbre_condition_id
+   * @param string $timbre_condition_id
+   * @return $this
+   */    
+  public function setTimbre_condition_id($timbre_condition_id) {
+    unset($this->erreurs['timbre_condition_id']);
+    $regExp = '/^[1-9]\d*$/';
+    if (!preg_match($regExp, $timbre_condition_id)) {
+      $this->erreurs['timbre_condition_id'] = 'Doit être un id valide';
+    }
+    $this->timbre_condition_id = $timbre_condition_id;
+  }
 
   /**
    * Mutateur de la propriété timbre_status_id
@@ -148,21 +286,20 @@ class Timbre
       $this->erreurs['timbre_status_id'] = 'Status incorrect.';
     }
     $this->timbre_status_id = $timbre_status_id;
-    return $this;
   }
 
-  /**
-   * Mutateur de la propriété timbre_certification
-   * @param int $timbre_certification
+    /**
+   * Mutateur de la propriété timbre_utilisateur_id
+   * @param string $timbre_utilisateur_id
    * @return $this
    */    
-  public function setTimbre_certification($timbre_certification) {
-    unset($this->erreurs['timbre_certification']);
+  public function setTimbre_utilisateur_id($timbre_utilisateur_id) {
+    unset($this->erreurs['timbre_utilisateur_id']);
     $regExp = '/^[1-9]\d*$/';
-    if (!preg_match($regExp, $timbre_certification)) {
-      $this->erreurs['timbre_certification'] = 'Numéro de genre incorrect.';
+    if (!preg_match($regExp, $timbre_utilisateur_id)) {
+      $this->erreurs['timbre_utilisateur_id'] = 'Doit être un id valide';
     }
-    $this->timbre_certification= $timbre_certification;
-    return $this;
-  }    
+    $this->timbre_utilisateur_id = $timbre_utilisateur_id;
+  }
+  
 }

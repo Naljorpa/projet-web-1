@@ -136,7 +136,7 @@ dl {
     }
 
     .fiche-enchere .zone-image-secondaire {
-        display: flex;
+        flex-direction: row;
         gap: var(--spacing-XS);
     }
 
