@@ -75,7 +75,7 @@ class Frontend extends Routeur
     );
   }
 
-   /**
+  /**
    * Affiche la page de connection
    * 
    */
@@ -93,6 +93,12 @@ class Frontend extends Routeur
       $session = null;
     }
 
+    $listeTimbreById = $this->oRequetesSQL->getTimbresById([
+      "utilisateur_id" => $session->utilisateur_id
+    ]);
+
+    $listeTimbre = $this->oRequetesSQL->getTimbres();
+
     (new Vue)->generer(
       'vProfile',
       array(
@@ -100,7 +106,9 @@ class Frontend extends Routeur
         'titre'               => 'Profile d\'utilisateur',
         'pays'                => $pays,
         'condition'           => $condition,
-        'status'           => $status
+        'status'              => $status,
+        'listeTimbre'         => $listeTimbre,
+        'listeTimbreById'     => $listeTimbreById
       ),
       'gabarit-frontend'
     );
@@ -138,6 +146,9 @@ class Frontend extends Routeur
   public function afficherFiche()
   {
     $fiche = false;
+    
+    print_r($this->enchere_id);
+
     if (!is_null($this->enchere_id)) {
       $fiche = $this->oRequetesSQL->getFiche($this->enchere_id);
       $images = $this->oRequetesSQL->getImages($this->enchere_id);
@@ -150,13 +161,16 @@ class Frontend extends Routeur
       $session = null;
     }
 
+    $miseActuelle = $this->oRequetesSQL->getMise($this->enchere_id);
+
     (new Vue)->generer(
       "vFiche",
       array(
         'titre'  => "Fiche",
         'oUtilisateur'        =>  $session,
         'fiche' => $fiche,
-        'images' => $images
+        'images' => $images,
+        'miseActuelle' =>  $miseActuelle["MAX(mise_valeur)"]
       ),
       "gabarit-frontend"
     );

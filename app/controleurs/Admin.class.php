@@ -46,6 +46,9 @@ class Admin extends Routeur
       'a' => [
         'nom' => 'ajouterMise'
       ],
+      'af' => [
+        'nom' => 'ajouterMiseFiche'
+      ],
       'l' => [
         'nom' => 'listerMise'
       ]
@@ -54,6 +57,11 @@ class Admin extends Routeur
     'timbre' => [
       'a' => [
         'nom' => 'ajouterTimbre'
+      ]
+    ],
+    'enchere' => [
+      'a' => [
+        'nom' => 'ajouterEnchere'
       ]
     ]
   ];
@@ -185,11 +193,19 @@ class Admin extends Routeur
     $condition =  $this->oRequetesSQL->getCondition();
     $status =  $this->oRequetesSQL->getStatus();
 
+
     if (isset($this->oUtilisateur)) {
       $oUtilisateur = $this->oUtilisateur;
     } else {
       $oUtilisateur = $oUtilisateur;
     }
+
+
+    $listeTimbreById = $this->oRequetesSQL->getTimbres([
+      "utilisateur_id" => $oUtilisateur->utilisateur_id
+    ]);
+
+    $listeTimbre = $this->oRequetesSQL->getTimbres();
 
     (new Vue)->generer(
       'vProfile',
@@ -199,6 +215,8 @@ class Admin extends Routeur
         'pays'                => $pays,
         'condition'           => $condition,
         'status'              => $status,
+        'listeTimbreById'     => $listeTimbreById,
+        'listeTimbre'         => $listeTimbre,
         'classRetour'         => $this->classRetour,
         'messageRetourAction' => $this->messageRetourAction
       ),
@@ -216,9 +234,9 @@ class Admin extends Routeur
     if (count($_POST) !== 0) {
       // retour de saisie du formulaire
       $utilisateur = $_POST;
-    
+
       $oUtilisateur = new Utilisateur($utilisateur); // création d'un objet Utilisateur pour contrôler la saisie
-   
+
       $erreurs = $oUtilisateur->erreurs;
       if (count($erreurs) === 0) {
         $oUtilisateur->verifie_courriel($oUtilisateur);
@@ -389,6 +407,71 @@ class Admin extends Routeur
     );
   }
 
+  public function ajouterMiseFiche()
+  {
+
+
+    $enchere_id = $_POST["enchere_id"];
+    $fiche = false;
+    if (!is_null($enchere_id)) {
+      $fiche = $this->oRequetesSQL->getFiche($enchere_id);
+      $images = $this->oRequetesSQL->getImages($enchere_id);
+    }
+    if (!$fiche) throw new Exception("Fiche timbre inexistante.");
+
+
+    if (isset($_SESSION['oUtilisateur'])) {
+      $session = $_SESSION['oUtilisateur'];
+    } else {
+      $session = null;
+    }
+
+    $encheres = $this->oRequetesSQL->getEncheres();
+
+    $miseActuelle = $this->oRequetesSQL->getMise($enchere_id);
+    
+    echo '<pre>', print_r($miseActuelle), '</pre>';
+
+    $mise = [];
+    $erreurs = [];
+    $nouvelleMise = [];
+    $succes = "";
+
+
+    if (count($_POST) !== 0) {
+      $mise = $_POST;
+      $oMise = new Mise($mise);
+      $erreurs = $oMise->erreurs;
+
+      if (count($erreurs) === 0) {
+        $nouvelleMise = $this->oRequetesSQL->ajouterMise([
+          'mise_utilisateur_id'    => $oMise->mise_utilisateur_id,
+          'mise_enchere_id' => $oMise->mise_enchere_id,
+          'mise_valeur' => $oMise->mise_valeur
+        ]);
+        if ($nouvelleMise > 0) { // test de la clé de l'utilisateur ajouté
+          $succes = "Mise réalisée avec succès";
+        }
+      }
+      $miseActuelle = $this->oRequetesSQL->getMise($enchere_id);
+    }
+
+    (new Vue)->generer(
+      'vFiche',
+      array(
+        'titre'  => "Fiche",
+        'mise'   => $mise,
+        'oUtilisateur'        =>  $session,
+        'fiche' => $fiche,
+        'miseActuelle' => $miseActuelle["MAX(mise_valeur)"],
+        'images' => $images,
+        'succes' => $succes,
+        'erreurs'      => $erreurs
+      ),
+      "gabarit-frontend"
+    );
+  }
+
 
   public function ajouterTimbre()
   {
@@ -408,50 +491,61 @@ class Admin extends Routeur
     }
 
 
+    $listeTimbreById = $this->oRequetesSQL->getTimbresById([
+      "utilisateur_id" => $session->utilisateur_id
+    ]);
+
+    $listeTimbre = $this->oRequetesSQL->getTimbres();
+
     if (count($_POST) !== 0) {
 
       $timbre = $_POST;
+
 
       $oTimbre = new Timbre($timbre);
 
       $erreurs = $oTimbre->erreurs;
 
 
-          if (count($erreurs) === 0) {
-            echo '<pre>', print_r($oTimbre), '</pre>';
-            $timbre_id = $this->oRequetesSQL->ajouterTimbre([
-              'timbre_nom'    => $oTimbre->timbre_nom,
-              'timbre_annee' => $oTimbre->timbre_annee,
-              'timbre_description' => $oTimbre->timbre_description,
-              'timbre_histoire' => $oTimbre->timbre_histoire,
-              'timbre_dimension' => $oTimbre->timbre_dimension,
-              'timbre_certification' => $oTimbre->timbre_certification,
-              'timbre_couleur' => $oTimbre->timbre_couleur,
-              'timbre_tirage' => $oTimbre->timbre_tirage,
-              'timbre_pays_id' => $oTimbre->timbre_pays_id,
-              'timbre_condition_id' => $oTimbre->timbre_condition_id,
-              'timbre_status_id' => $oTimbre->timbre_status_id,
-              'timbre_utilisateur_id' => $oTimbre->timbre_utilisateur_id
-            ]);
-            $succes = "Ajout de timbre réalisée avec succès";
-          } else {
-            (new Vue)->generer(
-              'vProfile',
-              array(
-                'oUtilisateur'        =>  $session,
-                'titre'               => 'Profile d\'utilisateur',
-                'pays'                => $pays,
-                'condition'           => $condition,
-                'status'              => $status,
-                'erreurs'             => $erreurs,
-                'timbre'              => $timbre,  
-                'classRetour'         => $this->classRetour,
-                'messageRetourAction' => $this->messageRetourAction
-              ),
-              'gabarit-frontend'
-            );
-          }
-      
+      if (count($erreurs) === 0) {
+
+        $timbre_id = $this->oRequetesSQL->ajouterTimbre([
+          'timbre_nom'    => $oTimbre->timbre_nom,
+          'timbre_annee' => $oTimbre->timbre_annee,
+          'timbre_description' => $oTimbre->timbre_description,
+          'timbre_histoire' => $oTimbre->timbre_histoire,
+          'timbre_dimension' => $oTimbre->timbre_dimension,
+          'timbre_certification' => $oTimbre->timbre_certification,
+          'timbre_couleur' => $oTimbre->timbre_couleur,
+          'timbre_tirage' => $oTimbre->timbre_tirage,
+          'timbre_pays_id' => $oTimbre->timbre_pays_id,
+          'timbre_condition_id' => $oTimbre->timbre_condition_id,
+          'timbre_status_id' => $oTimbre->timbre_status_id,
+          'timbre_utilisateur_id' => $oTimbre->timbre_utilisateur_id
+        ]);
+        $succes = "Ajout de timbre réalisée avec succès";
+      }
+      $listeTimbreById = $this->oRequetesSQL->getTimbresById([
+        "utilisateur_id" => $session->utilisateur_id
+      ]);
+
+      (new Vue)->generer(
+        'vProfile',
+        array(
+          'oUtilisateur'        =>  $session,
+          'titre'               => 'Profile d\'utilisateur',
+          'pays'                => $pays,
+          'condition'           => $condition,
+          'status'              => $status,
+          'listeTimbre'         => $listeTimbre,
+          'listeTimbreById'     => $listeTimbreById,
+          'erreurs'             => $erreurs,
+          'timbre'              => $timbre,
+          'classRetour'         => $this->classRetour,
+          'messageRetourAction' => $this->messageRetourAction
+        ),
+        'gabarit-frontend'
+      );
     }
     (new Vue)->generer(
       'vProfile',
@@ -461,10 +555,154 @@ class Admin extends Routeur
         'pays'                => $pays,
         'condition'           => $condition,
         'status'              => $status,
+        'listeTimbre'         => $listeTimbre,
+        'listeTimbreById'     => $listeTimbreById,
         'succes'              => $succes,
         'erreurs'             => $erreurs,
         'classRetour'         => $this->classRetour,
         'messageRetourAction' => $this->messageRetourAction
+      ),
+      'gabarit-frontend'
+    );
+  }
+
+  public function traitementImage()
+  {
+
+    if (count($_POST) !== 0) {
+
+
+      $date = new DateTimeImmutable();
+      $nom_fichier = $_FILES['userfile']['name'];
+      $fichier = $_FILES['userfile']['tmp_name'];
+      $taille = $_FILES['userfile']['size'];
+      $pays = $this->oRequetesSQL->getPays();
+      $condition =  $this->oRequetesSQL->getCondition();
+      $status =  $this->oRequetesSQL->getStatus();
+      $ajouter = "";
+
+      if (isset($_SESSION['oUtilisateur'])) {
+        $session = $_SESSION['oUtilisateur'];
+      } else {
+        $session = null;
+      }
+
+      $listeTimbreById = $this->oRequetesSQL->getTimbresById([
+        "utilisateur_id" => $session->utilisateur_id
+      ]);
+
+      $listeTimbre = $this->oRequetesSQL->getTimbres();
+
+      // $image_nom = $_POST["image_nom"];
+      // $image_timbre_id = $_POST["image_timbre_id"];
+      $image_lien = "assets/images/timbres/" . $date->getTimestamp() . "_" . $nom_fichier;
+
+      $image_lienArray = ["image_lien" => $image_lien];
+
+      $image = array_merge($image_lienArray, $_POST);
+
+      $oImage = new Image($image);
+
+      $erreurs = $oImage->erreurs;
+
+
+      if (count($erreurs) === 0) {
+
+        if (move_uploaded_file($fichier, "assets/images/timbres/" . $date->getTimestamp() . "_" . $nom_fichier)) {
+          $nouvelleImage = $this->oRequetesSQL->ajouterImage([
+            'image_nom'    => $oImage->image_nom,
+            'image_lien' => $oImage->image_lien,
+            'image_timbre_id' => $oImage->image_timbre_id
+          ]);
+
+          if ($nouvelleImage > 0) { // test de la clé de l'utilisateur ajouté
+            $ajouter = "Image ajouté avec success";
+          }
+        } else {
+          $ajouter = "Vous devez inclure une image";
+        }
+      }
+
+      (new Vue)->generer(
+        'vProfile',
+        array(
+          'oUtilisateur'        =>  $session,
+          'titre'               => 'Profile d\'utilisateur',
+          'pays'                => $pays,
+          'condition'           => $condition,
+          'status'              => $status,
+          'listeTimbre'         => $listeTimbre,
+          'listeTimbreById'     => $listeTimbreById,
+          'erreurs'             => $erreurs,
+          'ajouter'             => $ajouter
+        ),
+        'gabarit-frontend'
+      );
+    }
+  }
+
+  public function ajouterEnchere()
+  {
+    $pays = $this->oRequetesSQL->getPays();
+    $condition =  $this->oRequetesSQL->getCondition();
+    $status =  $this->oRequetesSQL->getStatus();
+    $ajouter = "";
+
+    if (isset($_SESSION['oUtilisateur'])) {
+      $session = $_SESSION['oUtilisateur'];
+    } else {
+      $session = null;
+    }
+
+    $listeTimbreById = $this->oRequetesSQL->getTimbresById([
+      "utilisateur_id" => $session->utilisateur_id
+    ]);
+
+    $listeTimbre = $this->oRequetesSQL->getTimbres();
+
+    $enchere_date_fin = strtotime($_POST["enchere_date_fin"]);
+    $enchere_date_fin = date('Y-m-d H:i:s', $enchere_date_fin);
+
+    $enchere_date_debut = new DateTime("now", new DateTimeZone('America/New_York'));
+    $enchere_date_debut = $enchere_date_debut->format('Y-m-d H:i:s');
+
+    unset($_POST['enchere_date_fin']);
+
+    $enchere_date_debut_array = ["enchere_date_debut" => $enchere_date_debut];
+    $enchere_date_fin_array = ["enchere_date_fin" => $enchere_date_fin];
+    $enchere = array_merge($enchere_date_debut_array, $_POST);
+    $enchere = array_merge($enchere_date_fin_array, $enchere);
+
+    $oEnchere = new Enchere($enchere);
+
+    $erreurs = $oEnchere->erreurs;
+
+    if (count($erreurs) === 0) {
+      $nouvelleEnchere = $this->oRequetesSQL->ajouterEnchere([
+        'enchere_prix_base'    => $oEnchere->enchere_prix_base,
+        'enchere_date_debut' => $oEnchere->enchere_date_debut,
+        'enchere_date_fin' => $oEnchere->enchere_date_fin,
+        'enchere_timbre_id' => $oEnchere->enchere_timbre_id,
+        'enchere_utilisateur_id' => $oEnchere->enchere_utilisateur_id
+      ]);
+
+      if ($nouvelleEnchere > 0) { // test de la clé de l'utilisateur ajouté
+        $ajouter = "Enchère ajouté avec success";
+      }
+    }
+
+    (new Vue)->generer(
+      'vProfile',
+      array(
+        'oUtilisateur'        =>  $session,
+        'titre'               => 'Profile d\'utilisateur',
+        'pays'                => $pays,
+        'condition'           => $condition,
+        'status'              => $status,
+        'listeTimbre'         => $listeTimbre,
+        'listeTimbreById'     => $listeTimbreById,
+        'erreurs'             => $erreurs,
+        'ajouter'             => $ajouter
       ),
       'gabarit-frontend'
     );

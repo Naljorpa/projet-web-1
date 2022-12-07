@@ -20,7 +20,8 @@ class Routeur
     ["fiche",         "Frontend", "afficherFiche"],
     ["inscription",   "Frontend", "inscription"],
     ["film",          "Frontend", "voirFilm"],
-    ["profile",       "Frontend", "afficherProfile"]
+    ["profile",       "Frontend", "afficherProfile"],
+    ["traitement",    "Admin",    "traitementImage"]
   ];
 
   protected $oRequetesSQL; // objet RequetesSQL utilisé par tous les contrôleurs

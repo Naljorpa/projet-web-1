@@ -27,21 +27,30 @@
 					<span>{{ fiche.enchere_date_fin }}</span>
 				</p>
 			</div>
-			<form action="post">
+			<form method="POST" action="admin?entite=mise&action=af">
 				<div class="mise flexer">
 					<div class="mise-dep-actu">
 						<p>Mise de départ:
 							<span class="bold600">{{ fiche.enchere_prix_base }}$</span>
 						</p>
 						<p>Mise actuelle:
-							<span class="bold600 text-red">{{ fiche.mise_valeur }}$</span>
+							<span class="bold600 text-red">{{ miseActuelle }}$</span>
 						</p>
 					</div>
+					<input type="hidden" name="enchere_id" value="{{ fiche.enchere_id }}">
+					<input type="hidden" name="utilisateur_id" value="{{ session.oUtilisateur.utilisateur_id }}">
 					<label hidden for="mise">Mise</label>
-					<input type="text" id="mise" placeholder="$">
+					<input type="number" name="mise_valeur" placeholder="$" value="{{ mise.mise_valeur }}">
+					<span class="erreur">{{ erreurs.mise_valeur }}</span>
 				</div>
-				<div class="miser-suivre flexer">
-					<button class="btn">Misez</button>
+				<div class="miser-suivre">
+					{% if session.oUtilisateur is defined %}
+					<input type="submit" class="btn-big" value="Miser">
+					<span>&nbsp;{{ succes }}</span>
+					{% endif %}
+					{% if session.oUtilisateur is null %}
+					<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>
+					{% endif %}
 					<a href="#">Suivre cette enchère »</a>
 				</div>
 			</form>

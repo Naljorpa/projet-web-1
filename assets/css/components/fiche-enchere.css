@@ -63,7 +63,7 @@ dl {
 
 
 
-.fiche-enchere input {
+.fiche-enchere input:not(.miser-suivre input) {
     margin: auto 0 auto auto;
     padding: var(--spacing-XS);
 }
@@ -79,6 +79,11 @@ dl {
 .fiche-enchere .miser-suivre {
     margin-top: var(--spacing-S);
     justify-content: space-between;
+    display: flex;
+}
+
+.fiche-enchere .miser-suivre input{
+
 }
 
 .fiche-enchere button {
@@ -158,7 +163,7 @@ dl {
         margin-top: var(--spacing-XS);
     }
 
-    .fiche-enchere button {
+    .fiche-enchere .btn-big {
         margin-bottom: var(--spacing-XS);
     }
 }

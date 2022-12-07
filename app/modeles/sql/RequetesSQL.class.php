@@ -56,8 +56,8 @@ class RequetesSQL extends RequetesPDO
       FROM enchere
       INNER JOIN timbre ON enchere_timbre_id = timbre_id
       INNER JOIN pays ON timbre_pays_id = pays_id
+      LEFT OUTER JOIN mise ON enchere_id = mise_enchere_id and mise_valeur =(select max(mise_valeur) from mise) 
       INNER JOIN `condition` ON timbre_condition_id = condition_id
-      INNER JOIN mise ON enchere_id = mise_enchere_id and mise_valeur =(select max(mise_valeur) from mise) 
       INNER JOIN image ON image_timbre_id = timbre_id
       GROUP BY timbre_id
     ";
@@ -78,22 +78,34 @@ class RequetesSQL extends RequetesPDO
        INNER JOIN timbre ON enchere_timbre_id = timbre_id
        INNER JOIN pays ON timbre_pays_id = pays_id
        INNER JOIN `condition` ON timbre_condition_id = condition_id
-       INNER JOIN mise ON mise_enchere_id = enchere_id
+       LEFT OUTER JOIN mise ON mise_enchere_id = enchere_id
        INNER JOIN utilisateur ON enchere_utilisateur_id = utilisateur_id
         WHERE enchere_id = :enchere_id AND timbre_status_id = " . Timbre::STATUT_ACTIF;
 
     return $this->getLignes(['enchere_id' => $enchere_id], RequetesPDO::UNE_SEULE_LIGNE);
   }
 
-  public function getImages($enchere_id)
+  public function getTimbresById($champs)
   {
     $this->sql =
-      "SELECT image_lien, image_nom, image_timbre_id
-  FROM image
-  INNER JOIN timbre ON image_timbre_id = timbre_id
-  WHERE image_timbre_id = :enchere_id";
+      "SELECT timbre_id, timbre_nom
+      FROM timbre
+      WHERE timbre_utilisateur_id = :utilisateur_id
+    ";
 
-    return $this->getLignes(['enchere_id' => $enchere_id]);
+    return $this->getLignes($champs);
+  }
+
+
+  public function getTimbres()
+  {
+    $this->sql =
+      "SELECT timbre_id, timbre_nom
+      FROM timbre
+      
+    ";
+
+    return $this->getLignes();
   }
 
   /**
@@ -107,6 +119,37 @@ class RequetesSQL extends RequetesPDO
       INSERT INTO timbre SET timbre_nom = :timbre_nom, timbre_annee = :timbre_annee, timbre_description = :timbre_description, timbre_histoire = :timbre_histoire, timbre_dimension = :timbre_dimension,timbre_certification = :timbre_certification, timbre_couleur = :timbre_couleur, timbre_tirage = :timbre_tirage, timbre_pays_id = :timbre_pays_id, timbre_condition_id = :timbre_condition_id, timbre_status_id = :timbre_status_id, timbre_utilisateur_id = :timbre_utilisateur_id';
     return $this->CUDLigne($champs);
   }
+
+   /* GESTION DES IMAGES 
+     ======================== */
+
+     public function getImages($enchere_id)
+     {
+       $this->sql =
+         "SELECT image_lien, image_nom, image_timbre_id
+         FROM image
+         INNER JOIN timbre ON image_timbre_id = timbre_id
+         INNER JOIN enchere ON enchere_timbre_id = timbre_id
+         WHERE enchere_id = :enchere_id
+    
+     ";
+   
+       return $this->getLignes(['enchere_id' => $enchere_id]);
+     }
+   
+
+      /**
+   * Ajouter une image
+   * @param array $champs tableau des champs du image
+   * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+   */
+  public function ajouterImage($champs)
+  {
+    $this->sql = '
+      INSERT INTO image SET image_nom = :image_nom, image_lien = :image_lien, image_timbre_id = :image_timbre_id';
+    return $this->CUDLigne($champs);
+  }
+
 
   /* GESTION DES MISES 
      ======================== */
@@ -136,7 +179,22 @@ class RequetesSQL extends RequetesPDO
     return $this->CUDLigne($champs);
   }
 
+  
+  /* GESTION DES MISES 
+     ======================== */
 
+    
+ /**
+   * Ajouter une enchere
+   * @param array $champs tableau des champs de l'enchere
+   * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+   */
+  public function  ajouterEnchere($champs)
+  {
+    $this->sql = '
+      INSERT INTO enchere SET enchere_prix_base = :enchere_prix_base, enchere_date_debut = :enchere_date_debut, enchere_date_fin = :enchere_date_fin, enchere_timbre_id = :enchere_timbre_id, enchere_utilisateur_id = :enchere_utilisateur_id';
+    return $this->CUDLigne($champs);
+  }
 
 
 
