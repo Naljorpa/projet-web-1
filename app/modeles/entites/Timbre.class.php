@@ -19,6 +19,11 @@ class Timbre
   private $timbre_condition_id;
   private $timbre_status_id;
   private $timbre_utilisateur_id;
+  private $image_id;
+  private $image_lien;
+  private $image_nom;
+ 
+
 
   
   private $erreurs = [];
@@ -99,6 +104,18 @@ class Timbre
    public function getTimbre_utilisateur_id()
    {
      return $this->timbre_utilisateur_id;
+   }
+   public function getImage_id()
+   {
+     return $this->image_id;
+   }
+   public function getImage_nom()
+   {
+     return $this->image_nom;
+   }
+   public function getImage_lien()
+   {
+     return $this->image_lien;
    }
    public function getErreurs()
    {
@@ -302,4 +319,48 @@ class Timbre
     $this->timbre_utilisateur_id = $timbre_utilisateur_id;
   }
   
+  /**
+   * Mutateur de la propriété image_id 
+   * @param int $image_id
+   * @return $this
+   */    
+  public function setImage_id($image_id) {
+    unset($this->erreurs['image_id']);
+    $regExp = '/^[1-9]\d*$/';
+    if (!preg_match($regExp, $image_id)) {
+      $this->erreurs['image_id'] = 'Numéro d\'image incorrect.';
+    }
+    $this->image_id = $image_id;
+  }    
+
+  /**
+   * Mutateur de la propriété image_nom
+   * @param string $image_nom
+   * @return $this
+   */    
+  public function setImage_nom($image_nom) {
+    unset($this->erreurs['image_nom']);
+    $image_nom = trim($image_nom);
+    $regExp = '/^.+$/';
+    if (!preg_match($regExp, $image_nom)) {
+      $this->erreurs['image_nom'] = 'Au moins un caractère.';
+    }
+    $this->image_nom = $image_nom;
+  }   
+
+   /**
+   * Mutateur de la propriété image_lien 
+   * @param int $image_lien
+   * @return $this
+   */    
+  public function setImage_lien($image_lien) {
+    unset($this->erreurs['image_lien']);
+    $image_lien = trim($image_lien);
+    $regExp = '/^.+$/';
+    if (!preg_match($regExp, $image_lien)) {
+      $this->erreurs['image_lien'] = 'Svp ajouter une image';
+    }
+    $this->image_lien = $image_lien;
+    return $this;
+  }   
 }

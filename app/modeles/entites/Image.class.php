@@ -113,8 +113,8 @@ class Image
   }   
 
   /**
-   * Mutateur de la propriété image_id 
-   * @param int $image_id
+   * Mutateur de la propriété image_timbre_id 
+   * @param int $image_timbre_id
    * @return $this
    */    
   public function setImage_timbre_id($image_timbre_id) {

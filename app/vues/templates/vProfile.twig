@@ -16,7 +16,7 @@
 	<a href="admin?entite=utilisateur&action=s">Supprimer mon profile >></a>
 
 	<h2>Ajouter un timbre</h2>
-	<form method="POST" action="admin?entite=timbre&action=a">
+	<form enctype="multipart/form-data" method="POST" action="admin?entite=timbre&action=a">
 		<span>{{ succes }}</span>
 		<div>
 			<div>
@@ -50,7 +50,7 @@
 				<span class="text-red">{{ erreurs.timbre_dimension }}</span>
 
 				<label>Certification</label>
-				<div class="certification">
+				<div >
 					<input type="radio" id="1" name="timbre_certification" value="1" checked>
 					<label for="1">oui</label>
 					<input type="radio" id="2" name="timbre_certification" value="2">
@@ -84,13 +84,23 @@
 
 				<input type="hidden" name="timbre_utilisateur_id" value="{{ oUtilisateur.utilisateur_id }}">
 			</div>
+			<div class="last-div">
+				<label>Nom de l'image:</label>
+				<input name="image_nom" type="text" value=" {{ image.image_nom }}">
+				<span class="text-red">{{ erreurs.image_nom }}</span>
+				<!-- Name of input element determines name in $_FILES array -->
+				<label>Enregistrer cette image:</label>
+				<span class="text-red">{{ erreurImage }}</span>
+				<input name="userfile" type="file"/>
+				<span class="text-red">{{ erreurs.image_lien }}</span>
+			</div>
 		</div>
 		<input class="btn" type="submit" value="Soumettre">
 
 	</form>
-	<h2>Ajouter une image</h2>
+	<h2>Ajouter une image supplémentaire</h2>
 	<span>{{ ajouterImage }}</span>
-	<form enctype="multipart/form-data" action="traitement" method="POST">
+	<form enctype="multipart/form-data" action="admin?entite=image&action=a" method="POST">
 
 		<label>Nom de l'image:</label>
 		<input name="image_nom" type="text" value=" {{ image.image_nom }}">
@@ -104,7 +114,7 @@
 		<span class="text-red">{{ erreurs.image_timbre_id }}</span>
 		<!-- Name of input element determines name in $_FILES array -->
 		<label>Enregistrer cette image:</label>
-			<span class="text-red">{{ erreurImage }}</span>
+		<span class="text-red">{{ erreurImage }}</span>
 		<input name="userfile" type="file"/>
 		<span class="text-red">{{ erreurs.image_lien }}</span>
 		<input class="btn" type="submit" value="Ajouter"/>

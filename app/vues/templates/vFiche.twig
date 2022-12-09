@@ -41,7 +41,7 @@
 					<input type="hidden" name="utilisateur_id" value="{{ session.oUtilisateur.utilisateur_id }}">
 					<label hidden for="mise">Mise</label>
 					<input type="number" name="mise_valeur" placeholder="$" value="{{ mise.mise_valeur }}">
-					<span class="erreur">{{ erreurs.mise_valeur }}</span>
+					<span class="text-red">{{ erreurs.mise_valeur }}</span>
 				</div>
 				<div class="miser-suivre">
 					{% if session.oUtilisateur is defined %}

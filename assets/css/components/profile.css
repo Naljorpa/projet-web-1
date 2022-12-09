@@ -8,8 +8,8 @@
     display: flex;
 }
 
-.profile form>div div:last-of-type:not(.certification){
-   margin-left: var(--spacing-L);
+.profile form>div div:not(.last-div){
+   margin-right: var(--spacing-L);
 }
 
 .profile form .btn{
