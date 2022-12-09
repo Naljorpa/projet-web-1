@@ -37,7 +37,7 @@
 				<span class="text-red">{{ erreurs.timbre_annee}}</span>
 
 				<label>Description</label>
-				<textarea rows="4" cols="50" name="timbre_description" value="{{ timbre.timbre_description }}"></textarea>
+				<textarea rows="4" cols="50" name="timbre_description"></textarea>
 				<span class="text-red">{{ erreurs.timbre_description }}</span>
 
 				<label>Histoire</label>
@@ -89,11 +89,11 @@
 
 	</form>
 	<h2>Ajouter une image</h2>
-	<span>{{ ajouter }}</span>
+	<span>{{ ajouterImage }}</span>
 	<form enctype="multipart/form-data" action="traitement" method="POST">
 
 		<label>Nom de l'image:</label>
-		<input name="image_nom" type="text">
+		<input name="image_nom" type="text" value=" {{ image.image_nom }}">
 		<span class="text-red">{{ erreurs.image_nom }}</span>
 		<label>Choisir le timbre associé</label>
 		<select name="image_timbre_id">
@@ -104,6 +104,7 @@
 		<span class="text-red">{{ erreurs.image_timbre_id }}</span>
 		<!-- Name of input element determines name in $_FILES array -->
 		<label>Enregistrer cette image:</label>
+			<span class="text-red">{{ erreurImage }}</span>
 		<input name="userfile" type="file"/>
 		<span class="text-red">{{ erreurs.image_lien }}</span>
 		<input class="btn" type="submit" value="Ajouter"/>

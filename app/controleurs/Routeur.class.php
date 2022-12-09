@@ -19,15 +19,14 @@ class Routeur
     ["encheres",      "Frontend", "listerEncheres"],
     ["fiche",         "Frontend", "afficherFiche"],
     ["inscription",   "Frontend", "inscription"],
-    ["film",          "Frontend", "voirFilm"],
     ["profile",       "Frontend", "afficherProfile"],
     ["traitement",    "Admin",    "traitementImage"]
   ];
 
   protected $oRequetesSQL; // objet RequetesSQL utilisé par tous les contrôleurs
 
-  // const BASE_URI = '/31B/TP3/'; // dossier racine du site par rapport au dossier racine d'Apache 
-  const BASE_URI = '/'; // pour le PHP Server de Visual Studio Code
+  const BASE_URI = '/'; // dossier racine du site par rapport au dossier racine d'Apache 
+  // const BASE_URI = '/projet-web-1/'; // pour le PHP Server de Visual Studio Code
 
   const FORBIDDEN       = 'HTTP 403';
   const ERROR_NOT_FOUND = 'HTTP 404';

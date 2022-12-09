@@ -147,7 +147,6 @@ class Frontend extends Routeur
   {
     $fiche = false;
     
-    print_r($this->enchere_id);
 
     if (!is_null($this->enchere_id)) {
       $fiche = $this->oRequetesSQL->getFiche($this->enchere_id);

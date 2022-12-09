@@ -1,3 +1,5 @@
+<span>&nbsp;{{ succes }}</span>
+
 <section class="encheres">
 
 	<details class="filtre-responsive">
@@ -227,6 +229,7 @@
 
 		</form>
 	</aside>
+	
 	<div class="grid-encheres">
 		{% for enchere in encheres %}
 
@@ -249,18 +252,17 @@
 							<small>Départ:
 								{{ enchere.enchere_prix_base }}$</small>
 							<small>Actuel:
-								<span class="text-red">{{ enchere.mise_valeur }}$</span>
+								<span class="text-red">{{ enchere.mise_valeur}}$</span>
 							</small>
 						</div>
 						<input type="hidden" name="enchere_id" value="{{ enchere.enchere_id }}">
 						<input type="hidden" name="utilisateur_id" value="{{ session.oUtilisateur.utilisateur_id }}">
-						<input type="number" name="mise_valeur" placeholder="$" value="{{ mise.mise_valeur }}">
-						
+						<input type="number" name="mise_valeur" placeholder="$">
+						{# value="{{ mise.mise_valeur }} #}
 					</div>
 					<span class="erreur">{{ erreurs.mise_valeur }}</span>
 					{% if session.oUtilisateur is defined %}
 					<input type="submit" class="btn" value="Miser">
-					<span>&nbsp;{{ succes }}</span>
 					{% endif %}
 					{% if session.oUtilisateur is null %}
 					<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>

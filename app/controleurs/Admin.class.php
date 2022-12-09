@@ -16,8 +16,7 @@ class Admin extends Routeur
   private $methodes = [
     'utilisateur' => [
       'l' => [
-        'nom' => 'profileUtilisateur',
-        // 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]
+        'nom' => 'profileUtilisateur'
       ],
       'a' => [
         'nom' => 'ajouterUtilisateur'
@@ -26,8 +25,7 @@ class Admin extends Routeur
         'nom' => 'connecter'
       ],
       'm' =>  [
-        'nom' => 'modifierUtilisateur',
-        //  $this->livre_id = $_GET['livre_id'] ?? null; 
+        'nom' => 'modifierUtilisateur'
       ],
       's' => [
         'nom' => 'supprimerUtilisateur',
@@ -350,7 +348,9 @@ class Admin extends Routeur
 
 
 
-
+  /**
+   * Ajouter une mise à partir de la page enchères
+   */
   public function ajouterMise()
   {
 
@@ -407,6 +407,10 @@ class Admin extends Routeur
     );
   }
 
+
+  /**
+   * Ajouter une mise à partir de la fiche
+   */
   public function ajouterMiseFiche()
   {
 
@@ -429,8 +433,6 @@ class Admin extends Routeur
     $encheres = $this->oRequetesSQL->getEncheres();
 
     $miseActuelle = $this->oRequetesSQL->getMise($enchere_id);
-    
-    echo '<pre>', print_r($miseActuelle), '</pre>';
 
     $mise = [];
     $erreurs = [];
@@ -472,7 +474,9 @@ class Admin extends Routeur
     );
   }
 
-
+  /**
+   * Ajouter un timbre
+   */
   public function ajouterTimbre()
   {
 
@@ -482,7 +486,7 @@ class Admin extends Routeur
 
     $timbre  = [];
     $erreurs = [];
-    $succes = "";
+    $succesTimbre = "";
 
     if (isset($_SESSION['oUtilisateur'])) {
       $session = $_SESSION['oUtilisateur'];
@@ -490,6 +494,7 @@ class Admin extends Routeur
       $session = null;
     }
 
+    $timbre = $_POST;
 
     $listeTimbreById = $this->oRequetesSQL->getTimbresById([
       "utilisateur_id" => $session->utilisateur_id
@@ -499,13 +504,9 @@ class Admin extends Routeur
 
     if (count($_POST) !== 0) {
 
-      $timbre = $_POST;
-
-
       $oTimbre = new Timbre($timbre);
 
       $erreurs = $oTimbre->erreurs;
-
 
       if (count($erreurs) === 0) {
 
@@ -523,12 +524,14 @@ class Admin extends Routeur
           'timbre_status_id' => $oTimbre->timbre_status_id,
           'timbre_utilisateur_id' => $oTimbre->timbre_utilisateur_id
         ]);
-        $succes = "Ajout de timbre réalisée avec succès";
+        $succesTimbre = "Ajout de timbre réalisée avec succès";
       }
       $listeTimbreById = $this->oRequetesSQL->getTimbresById([
         "utilisateur_id" => $session->utilisateur_id
       ]);
-
+      if($succesTimbre){
+        $timbre = "";
+      }
       (new Vue)->generer(
         'vProfile',
         array(
@@ -537,10 +540,11 @@ class Admin extends Routeur
           'pays'                => $pays,
           'condition'           => $condition,
           'status'              => $status,
+          'succes'              => $succesTimbre,
+          'timbre'              => $timbre,
           'listeTimbre'         => $listeTimbre,
           'listeTimbreById'     => $listeTimbreById,
           'erreurs'             => $erreurs,
-          'timbre'              => $timbre,
           'classRetour'         => $this->classRetour,
           'messageRetourAction' => $this->messageRetourAction
         ),
@@ -555,9 +559,10 @@ class Admin extends Routeur
         'pays'                => $pays,
         'condition'           => $condition,
         'status'              => $status,
+        'timbre'              => $timbre,
         'listeTimbre'         => $listeTimbre,
         'listeTimbreById'     => $listeTimbreById,
-        'succes'              => $succes,
+        'succes'              => $succesTimbre,
         'erreurs'             => $erreurs,
         'classRetour'         => $this->classRetour,
         'messageRetourAction' => $this->messageRetourAction
@@ -566,8 +571,13 @@ class Admin extends Routeur
     );
   }
 
+  /**
+   * Ajouter un image sur le server et le lien dans la banque de données
+   */
   public function traitementImage()
   {
+    $ajouterImage = "";
+    $erreurImage = "";
 
     if (count($_POST) !== 0) {
 
@@ -616,10 +626,10 @@ class Admin extends Routeur
           ]);
 
           if ($nouvelleImage > 0) { // test de la clé de l'utilisateur ajouté
-            $ajouter = "Image ajouté avec success";
+            $ajouterImage = "Image ajouté avec success";
           }
         } else {
-          $ajouter = "Vous devez inclure une image";
+          $erreurImage = "Vous devez inclure une image";
         }
       }
 
@@ -628,19 +638,24 @@ class Admin extends Routeur
         array(
           'oUtilisateur'        =>  $session,
           'titre'               => 'Profile d\'utilisateur',
+          'image'               => $image,
           'pays'                => $pays,
           'condition'           => $condition,
           'status'              => $status,
           'listeTimbre'         => $listeTimbre,
           'listeTimbreById'     => $listeTimbreById,
           'erreurs'             => $erreurs,
-          'ajouter'             => $ajouter
+          'erreurImage'         => $erreurImage,
+          'ajouterImage'        => $ajouterImage
         ),
         'gabarit-frontend'
       );
     }
   }
 
+  /**
+   * Ajouter/activer une enchère
+   */
   public function ajouterEnchere()
   {
     $pays = $this->oRequetesSQL->getPays();
@@ -674,6 +689,7 @@ class Admin extends Routeur
     $enchere = array_merge($enchere_date_fin_array, $enchere);
 
     $oEnchere = new Enchere($enchere);
+
 
     $erreurs = $oEnchere->erreurs;
 
