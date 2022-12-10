@@ -62,18 +62,6 @@ class RequetesSQL extends RequetesPDO
   public function getEncheres()
   {
 
-//   $this->sql =
-//   "SELECT *
-//   FROM enchere
-//   INNER JOIN timbre ON enchere_timbre_id = timbre_id
-//   INNER JOIN pays ON timbre_pays_id = pays_id
-//   LEFT OUTER JOIN mise ON enchere_id = mise_enchere_id and mise_valeur =(select max(mise_valeur) from mise) 
-//   INNER JOIN `condition` ON timbre_condition_id = condition_id
-//   INNER JOIN image ON image_timbre_id = timbre_id
-//   GROUP BY timbre_id
-// ";
-  
-
     $this->sql =
       "SELECT *
       FROM enchere
@@ -230,7 +218,7 @@ class RequetesSQL extends RequetesPDO
   }
 
 
-  /* GESTION DES MISES 
+  /* GESTION DES ENCHERES
      ======================== */
 
 
@@ -310,7 +298,8 @@ class RequetesSQL extends RequetesPDO
   public function modifierUtilisateur($champs)
   {
     $this->sql = '
-      UPDATE utilisateur SET utilisateur_nom = :utilisateur_nom, utilisateur_prenom = :utilisateur_prenom, utilisateur_courriel = :utilisateur_courriel, utilisateur_profile_id = :utilisateur_profile_id
+      UPDATE utilisateur SET utilisateur_nom = :utilisateur_nom, utilisateur_prenom = :utilisateur_prenom, utilisateur_courriel = :utilisateur_courriel, utilisateur_profile_id = :utilisateur_profile_id,
+      utilisateur_mdp = SHA2( :utilisateur_mdp, 512)
       WHERE utilisateur_id = :utilisateur_id';
     return $this->CUDLigne($champs);
   }

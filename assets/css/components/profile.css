@@ -1,3 +1,6 @@
+.profile, .modification{
+    margin-top: var(--spacing-L);
+}
 
 .profile form label, .profile form input, .profile form select, .profile form textarea, .profile a{
     display: block;
@@ -33,4 +36,33 @@
 }
 .profile .certification input{
     display: inline;
+}
+
+.profile .profile-itself{
+    display: flex;
+    margin-top: var(--spacing-S);
+}
+
+.profile .profile-itself>div:not(:last-of-type){
+    border-right: solid 1px var(--oldblue);
+    margin-right: var(--spacing-L);
+    padding-right: var(--spacing-L);
+}
+
+.profile .modifier{
+    display:block;
+}
+
+.profile .supprimer{
+    display: block;
+}
+
+.modification form label, .profile form input, .profile form select, .profile form textarea, .profile a{
+    display: block;
+    margin-top: var(--spacing-XS);
+}
+
+.modification form .btn{
+    display: block;
+    margin-top: var(--spacing-S);
 }

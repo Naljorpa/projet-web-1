@@ -4,17 +4,20 @@
 <section class="profile">
 	<h1>{{ titre|upper }}</h1>
 
-	<p class="messageRetourAction {{ classRetour }}">{{ messageRetourAction|raw }}&nbsp;</p>
-
-	<p>Nom:
-		{{ oUtilisateur.utilisateur_nom}}</p>
-	<p>Prénom:
-		{{ oUtilisateur.utilisateur_prenom}}</p>
-	<p>Courriel:
-		{{ oUtilisateur.utilisateur_courriel}}</p>
-	<a href="admin?entite=utilisateur&action=m">Modifier mon profile >></a>
-	<a href="admin?entite=utilisateur&action=s">Supprimer mon profile >></a>
-
+	<div class="profile-itself">
+		<div>
+			<p>Nom:
+				{{ oUtilisateur.utilisateur_nom}}</p>
+			<p>Prénom:
+				{{ oUtilisateur.utilisateur_prenom}}</p>
+			<p>Courriel:
+				{{ oUtilisateur.utilisateur_courriel}}</p>
+		</div>
+		<div>
+			<a class="modifier" href="admin?entite=utilisateur&action=m">Modifier mon profile >></a>
+			<a class="supprimer confirmer" href="admin?entite=utilisateur&action=s">Supprimer mon profile >></a>
+		</div>
+	</div>
 	<h2>Ajouter un timbre</h2>
 	<form enctype="multipart/form-data" method="POST" action="admin?entite=timbre&action=a">
 		<span>{{ succes }}</span>
@@ -50,7 +53,7 @@
 				<span class="text-red">{{ erreurs.timbre_dimension }}</span>
 
 				<label>Certification</label>
-				<div >
+				<div>
 					<input type="radio" id="1" name="timbre_certification" value="1" checked>
 					<label for="1">oui</label>
 					<input type="radio" id="2" name="timbre_certification" value="2">

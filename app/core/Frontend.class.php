@@ -18,6 +18,7 @@ class Frontend extends Routeur
   {
     $this->enchere_id = $_GET['enchere_id'] ?? null;
     $this->oRequetesSQL = new RequetesSQL;
+   
   }
 
 
@@ -27,6 +28,8 @@ class Frontend extends Routeur
    */
   public function accueil()
   {
+    $messageRetourAction= "";
+    
     if (isset($_SESSION['oUtilisateur'])) {
       $session = $_SESSION['oUtilisateur'];
     } else {
@@ -37,7 +40,8 @@ class Frontend extends Routeur
       "vAccueil",
       array(
         'titre'  => "Accueil",
-        'oUtilisateur'        =>  $session
+        'oUtilisateur'        =>  $session,
+        'messageRetourAction' => $messageRetourAction
       ),
       "gabarit-frontend"
     );
@@ -146,7 +150,7 @@ class Frontend extends Routeur
   public function afficherFiche()
   {
     $fiche = false;
-    
+    $miseMax ="";
 
     if (!is_null($this->enchere_id)) {
       $fiche = $this->oRequetesSQL->getFiche($this->enchere_id);
@@ -159,8 +163,10 @@ class Frontend extends Routeur
     } else {
       $session = null;
     }
-
     $miseActuelle = $this->oRequetesSQL->getMise($this->enchere_id);
+    if($miseActuelle){
+      $miseMax = $miseActuelle["MAX(mise_valeur)"];
+    }
 
     (new Vue)->generer(
       "vFiche",
@@ -169,7 +175,7 @@ class Frontend extends Routeur
         'oUtilisateur'        =>  $session,
         'fiche' => $fiche,
         'images' => $images,
-        'miseActuelle' =>  $miseActuelle["MAX(mise_valeur)"]
+        'miseActuelle' =>  $miseMax
       ),
       "gabarit-frontend"
     );

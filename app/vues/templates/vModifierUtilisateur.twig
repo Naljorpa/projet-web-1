@@ -1,0 +1,28 @@
+<section class="modification">
+	<h1>{{ titre|upper }}</h1>
+
+	<form method="POST" action="admin?entite=utilisateur&action=m">
+
+		<label>Nom</label>
+		<input name="utilisateur_nom" value="{{ oUtilisateur.utilisateur_nom }}">
+		<span>&nbsp;{{ erreurs.utilisateur_nom }}</span>
+
+		<label>Prénom</label>
+		<input name="utilisateur_prenom" value="{{ oUtilisateur.utilisateur_prenom }}">
+		<span>&nbsp;{{ erreurs.utilisateur_prenom }}</span>
+
+		<label>Courriel</label>
+		<input name="utilisateur_courriel" value="{{ oUtilisateur.utilisateur_courriel }}">
+		<span>&nbsp;{{ erreurs.utilisateur_courriel }}</span>
+
+        <label>Mot de passe</label>
+		<input type="password" name="utilisateur_mdp" >
+		<span>&nbsp;{{ erreurs.utilisateur_mdp }}</span>
+
+        <input type="hidden" name="utilisateur_profile_id" value="2">
+
+
+		<input class="btn" type="submit" value="Envoyer">
+
+	</form>
+</section>

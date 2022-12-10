@@ -140,10 +140,6 @@ class AdminUtilisateur extends Admin
 
                 $_SESSION['oUtilisateur'] = new Utilisateur($utilisateur);
                 $oUtilisateur = $_SESSION['oUtilisateur'];
-
-                // if ($this->oUtilisateur->utilisateur_profile_id == Utilisateur::PROFIL_MEMBRE) throw new Exception(self::FORBIDDEN);
-                // if ($this->oUtilisateur->utilisateur_profil == Utilisateur::PROFIL_EDITEUR) $this->gestionFilms();
-                // if ($this->oUtilisateur->utilisateur_profile_id == Utilisateur::PROFIL_ADMINISTRATEUR)
                 $profile = new AdminUtilisateur;
                 $profile->profileUtilisateur($oUtilisateur);
                 exit;
@@ -167,10 +163,13 @@ class AdminUtilisateur extends Admin
      */
     public function modifierUtilisateur()
     {
+
+        $session = $_SESSION['oUtilisateur'];
+        
         if (count($_POST) !== 0) {
             $utilisateur = $_POST;
             $oUtilisateur = new Utilisateur($utilisateur);
-
+           
             $erreurs = $oUtilisateur->erreurs;
             if (count($erreurs) === 0) {
                 $oUtilisateur->verifie_courrielId($oUtilisateur);
@@ -178,18 +177,21 @@ class AdminUtilisateur extends Admin
 
             $erreurs = $oUtilisateur->erreurs;
             if (count($erreurs) === 0) {
+              
                 if ($this->oRequetesSQL->modifierUtilisateur([
-                    'utilisateur_id'    => $oUtilisateur->utilisateur_id,
+                    'utilisateur_id'    => $session->utilisateur_id,
                     'utilisateur_nom'    => $oUtilisateur->utilisateur_nom,
                     'utilisateur_prenom' => $oUtilisateur->utilisateur_prenom,
                     'utilisateur_courriel' => $oUtilisateur->utilisateur_courriel,
-                    'utilisateur_profile_id' => $oUtilisateur->utilisateur_profile_id
+                    'utilisateur_profile_id' => $oUtilisateur->utilisateur_profile_id,
+                    'utilisateur_mdp' => $oUtilisateur->utilisateur_mdp
                 ])) {
                     $this->messageRetourAction = "Modification de l'utilisateur numéro $this->utilisateur_id effectuée.";
                 } else {
                     $this->classRetour = "erreur";
                     $this->messageRetourAction = "modification de l'utilisateur numéro $this->utilisateur_id non effectuée.";
                 }
+                
                 $this->profileUtilisateur($oUtilisateur);
                 exit;
             }
@@ -201,33 +203,44 @@ class AdminUtilisateur extends Admin
         }
 
         (new Vue)->generer(
-            'vAdminUtilisateurModifier',
+            'vModifierUtilisateur',
             array(
-                'oUtilisateur' => $this->oUtilisateur,
-                'titre'        => "Modifier l'utilisateur numéro $this->utilisateur_id",
-                'utilisateur'       => $utilisateur,
+                'oUtilisateur' => $session,
+                'titre'        => "Modifier l'utilisateur $session->utilisateur_prenom"." ". "$session->utilisateur_nom",
                 'erreurs'      => $erreurs
             ),
             'gabarit-frontend'
         );
     }
 
-    // /**
-    //  * Supprimer un utilisateur identifié par sa clé dans la propriété utilisateur_id
-    //  */
+    /**
+     * Supprimer un utilisateur identifié par sa clé dans la propriété utilisateur_id
+     */
 
-    // public function supprimerUtilisateur()
-    // {
-    //     if ($this->oRequetesSQL->supprimerUtilisateur($this->utilisateur_id)) {
-    //         $this->messageRetourAction = "Suppression de l'utilisateur numéro $this->utilisateur_id effectuée.";
-    //     } else {
-    //         $this->classRetour = "erreur";
-    //         $this->messageRetourAction = "Suppression de l'utilisateur numéro $this->utilisateur_id non effectuée.";
-    //     }
+    public function supprimerUtilisateur()
+    {
+        $session = $_SESSION['oUtilisateur'];
+     
+        if ($this->oRequetesSQL->supprimerUtilisateur($session->utilisateur_id)) {
+            $messageRetourAction = "Suppression de l'utilisateur $session->utilisateur_prenom $session->utilisateur_nom effectuée.";
+            $this->simpleDeconnecter();
+           
+        } else {
+            $this->classRetour = "erreur";
+            $messageRetourAction = "Suppression de l'utilisateur $session->utilisateur_prenom $session->utilisateur_nom  non effectuée.";
+        }
 
-    //     $accueil = new Frontend;
-    //     $accueil->accueil();
-    // }
+        (new Vue)->generer(
+            "vAccueil",
+            array(
+              'titre'  => "Accueil",
+              'oUtilisateur'        =>  $session,
+              'messageRetourAction' => $messageRetourAction
+            ),
+            "gabarit-frontend"
+          );
+      
+    }
 
     /**
      * Déconnecter un utilisateur
@@ -236,6 +249,15 @@ class AdminUtilisateur extends Admin
     {
         unset($_SESSION['oUtilisateur']);
         $this->connecter();
+    }
+
+      /**
+     * Déconnecter un utilisateur sans retour à la page de connection
+     */
+    public function simpleDeconnecter()
+    {
+        unset($_SESSION['oUtilisateur']);
+        
     }
 
     /**

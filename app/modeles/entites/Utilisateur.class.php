@@ -156,6 +156,22 @@ class Utilisateur
     $this->utilisateur_profile_id = $utilisateur_profile_id;
   }
 
+   /**
+   * Mutateur de la propriété utilisateur_profil
+   * @param string $utilisateur_profil
+   * @return $this
+   */
+  public function setUtilisateur_mdp($utilisateur_mdp)
+  {
+    unset($this->erreurs['utilisateur_mdp']);
+    $utilisateur_mdp = trim($utilisateur_mdp);
+    $regex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/";
+    if (!preg_match($regex, $utilisateur_mdp)) {
+      $this->erreurs['utilisateur_mdp'] = "Doit contenir au moins 8 caractères avec une lettre majuscule, une lettre minuscule, un chiffre et un de ces caractères spéciaux # ? ! @ $ % ^ & * -.";
+    }
+    $this->utilisateur_mdp = $utilisateur_mdp;
+  }
+
   /**
    * Génération d'un mot de passe aléatoire dans la propriété utilisateur_mdp
    * @return $this
