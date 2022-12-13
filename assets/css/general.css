@@ -9,11 +9,11 @@ h1 {
     padding: 0px;
 }
 
-img{
+img {
     max-width: 100%;
 }
 
-picture{
+picture {
     display: inline-block;
 }
 
@@ -21,7 +21,7 @@ p {
     margin: 0.7em 0 .1em 0;
 }
 
-main > * {
+main>* {
     max-width: 1400px;
     padding-bottom: var(--spacing-L);
     margin-left: auto;
@@ -29,12 +29,13 @@ main > * {
     padding-right: var(--spacing-L);
     padding-left: var(--spacing-L);
 }
-main>header{
-   max-width: initial;
-   padding-right: initial;
+
+main>header {
+    max-width: initial;
+    padding-right: initial;
 }
 
-body{
+body {
     background-color: var(--oldbeige);
 }
 
@@ -63,19 +64,20 @@ strong,
 small,
 label,
 button {
-    font-family: var( --text);
+    font-family: var(--text);
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-li{
+li {
 
     list-style-type: none;
 }
 
-h3, .actualite .voir-tous {
+h3,
+.actualite .voir-tous {
     font-size: var(--L);
 }
 
@@ -103,6 +105,78 @@ input {
     flex-wrap: wrap;
 }
 
+.dr {
+    text-align: right;
+}
+
+.g {
+    display: grid;
+    grid-gap: 3px;
+}
+
+.g.timbres {
+    grid-template-columns: repeat(5, max-content);
+    
+}
+
+.l {
+    display: contents;
+}
+
+.l div{
+    max-width:400px;
+}
+
+.l:nth-of-type(2n) .c {
+    background-color: var(--palebeige);
+}
+
+.l:nth-of-type(2n+1) .c {
+    background-color: var(--oldbeige);
+}
+
+.t {
+    text-align: center;
+    font-weight: bold;
+    border: 2px solid var(--oldgold);
+}
+
+.t img {
+    width: 10px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.t img:first-of-type {
+    margin-left: 10px;
+}
+
+.t img:hover {
+    transform: scale(1.3);
+}
+
+.t,
+.c {
+    box-sizing: border-box;
+    padding: 5px 20px;
+    line-height: 32px;
+    border-radius: 3px;
+}
+
+.c a,
+.c span {
+    margin: 0 5px;
+}
+
+.c span {
+    color: cornflowerblue;
+    cursor: pointer;
+}
+
+.c span:hover {
+    color: rgb(0, 73, 207);
+}
+
 
 /* grille d'encheres*/
 
@@ -113,11 +187,11 @@ input {
 
 .grid-encheres {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     margin: var(--spacing-XL) var(--spacing-M);
-   
-}   
+
+}
 
 /*Généralités de sections*/
 
@@ -157,7 +231,7 @@ input {
 }
 
 .chaine-cartes {
-    justify-content:center;
+    justify-content: center;
     gap: var(--spacing-XS);
 }
 
@@ -165,19 +239,19 @@ input {
     width: 300px;
 }
 
-.encheres-similaires{
+.encheres-similaires {
     margin-top: var(--spacing-XL);
     padding-left: 0;
     padding-right: 0;
 }
 
-.encheres-similaires>h1{
+.encheres-similaires>h1 {
     font-size: var(--LL);
     text-align: center;
     margin-bottom: var(--spacing-M);
 }
 
-@media screen and (max-width: 925px){
+@media screen and (max-width: 925px) {
 
 
     .enchere-vedettes>h1,
@@ -189,13 +263,13 @@ input {
         margin-bottom: var(--spacing-S);
     }
 
-    main>header{
+    main>header {
         padding: 0;
         max-width: 100%;
     }
 
-    .actualite .voir-tous{
+    .actualite .voir-tous {
         font-size: var(--M);
     }
-    
+
 }

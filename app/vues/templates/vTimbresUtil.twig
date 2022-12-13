@@ -1,0 +1,33 @@
+<section class="mes-timbres">
+	<h1>{{ titre }}</h1>
+	<p class="messageRetourAction {{ classRetour }}">{{ messageRetourAction|raw }}&nbsp;</p>
+	<div class="g timbres">
+		<div class="t">Id</div>
+		<div class="t">Nom</div>
+		<div class="t">Description</div>
+		<div class="t">Tirage
+		</div>
+		<div class="t">Status</div>
+		{% for timbre in timbres %}
+			<div class="l">
+				<div class="c dr">{{ timbre.timbre_id }}</div>
+				<div class="c   ">{{ timbre.timbre_nom }}</div>
+				<div class="c   ">{{ timbre.timbre_description }}</div>
+				<div class="c   ">{{ timbre.timbre_tirage }}</div>
+				<div class="c   ">
+					{% if timbre.timbre_status_id == 1 %}
+						actif
+					{% endif %}
+
+					{% if timbre.timbre_status_id == 2 %}
+						inactif
+					{% endif %}
+
+					{% if timbre.timbre_status_id == 3 %}
+						archivé
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</section>

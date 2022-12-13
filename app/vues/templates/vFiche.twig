@@ -9,9 +9,9 @@
 			<div class="zone-image-principal carrousel">
 				<div>
 					{% for image in images %}
-					<section id="timbre{{ loop.index }}">
-						<img src="{{ image.image_lien }}" alt="{{ image.image_name }}"></section>
-					{% endfor %}	
+						<section id="timbre{{ loop.index }}">
+							<img src="{{ image.image_lien }}" alt="{{ image.image_name }}"></section>
+					{% endfor %}
 				</div>
 			</div>
 		</aside>
@@ -24,7 +24,19 @@
 			<div>
 				<p class="temps flexer">
 					<span>Temps restant:</span>
-					<span>{{ fiche.enchere_date_fin }}</span>
+					<span>
+						{% if fiche.timbre_status_id == 1 %}
+							{% set difference = date(fiche.enchere_date_fin).diff(date(now)) %}
+							{% set leftDays = difference.days %}
+							{% set leftHours = difference.h %}
+							{% set leftMinutes = difference.i %}
+							{{ leftDays }}j
+							{{ leftHours }}h
+							{{ leftMinutes }}min.
+						{% else %}
+							0j 0h 0min.
+						{% endif %}
+					</span>
 				</p>
 			</div>
 			<form method="POST" action="admin?entite=mise&action=af">
@@ -40,16 +52,21 @@
 					<input type="hidden" name="enchere_id" value="{{ fiche.enchere_id }}">
 					<input type="hidden" name="utilisateur_id" value="{{ session.oUtilisateur.utilisateur_id }}">
 					<label hidden for="mise">Mise</label>
-					<input type="number" name="mise_valeur" placeholder="$" value="{{ mise.mise_valeur }}">
+					{% if fiche.timbre_status_id == 1 %}
+						<input type="number" name="mise_valeur" placeholder="$">
+						<span class="text-red">{{ erreurs.mise_valeur }}</span>
+					{% else %}
+						<span>Période de mise terminée</span>
+					{% endif %}
 					<span class="text-red">{{ erreurs.mise_valeur }}</span>
 				</div>
 				<div class="miser-suivre">
-					{% if session.oUtilisateur is defined %}
-					<input type="submit" class="btn-big" value="Miser">
-					<span>&nbsp;{{ succes }}</span>
+					{% if session.oUtilisateur is defined and fiche.timbre_status_id == 1 %}
+						<input type="submit" class="btn-big" value="Miser">
+						<span>&nbsp;{{ succes }}</span>
 					{% endif %}
 					{% if session.oUtilisateur is null %}
-					<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>
+						<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>
 					{% endif %}
 					<a href="#">Suivre cette enchère »</a>
 				</div>

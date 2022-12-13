@@ -66,3 +66,16 @@
     display: block;
     margin-top: var(--spacing-S);
 }
+
+.mes-timbres {
+    margin-top: var(--spacing-L);
+}
+
+.mes-timbres .card{
+    max-width: 350px;
+}
+
+.mes-timbres .card .mise{
+    gap:30px;
+    line-height: 18px;
+}

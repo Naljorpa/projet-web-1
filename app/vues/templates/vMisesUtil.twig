@@ -1,0 +1,47 @@
+<section class="mes-timbres">
+	<h1>{{ titre }}</h1>
+	<div class="grid-encheres">
+		{% for mise in mises %}
+
+			<article class="card">
+				<picture>
+					<img src="{{ mise.image_lien }}" alt=" {{ mise.image_nom }} ">
+				</picture>
+				<a href="fiche?enchere_id={{ mise.enchere_id }}">
+					<h1>{{ mise.timbre_nom }}</h1>
+				</a>
+				<hr>
+				<small class="temps">
+					<span>Temps Restant:
+					</span>
+					<span>
+						{% if mise.timbre_status_id == 1 %}
+							{% set difference = date(mise.enchere_date_fin).diff(date(now)) %}
+							{% set leftDays = difference.days %}
+							{% set leftHours = difference.h %}
+							{% set leftMinutes = difference.i %}
+							{{ leftDays }}j
+							{{ leftHours }}h
+							{{ leftMinutes }}min.
+						{% else %}
+							0j 0h 0min.
+						{% endif %}
+					</span>
+				</small>
+				<form method="POST" action="admin?entite=mise&action=a">
+					<div class="mise">
+						<div class="depart-actuel">
+							<small>Départ:
+								{{ mise.enchere_prix_base }}$</small>
+							<small>Actuel:
+								<span class="text-red">{{ mise.mise_actuel}}$</span>
+							</small>
+						</div>
+						<small class="derniere-mise">Ma dernière mise: {{ mise.mise_max }}$</small>
+					</div>
+				</form>
+			</article>
+		{% endfor %}
+
+	</div>
+</section>

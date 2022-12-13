@@ -52,7 +52,8 @@ dl {
 }
 
 .fiche-enchere .mise {
-    /* justify-content: space-evenly; */
+    display: flex;
+    justify-content: space-between;
     margin-top: var(--spacing-S);
     margin-bottom: var(--spacing-S);
 }

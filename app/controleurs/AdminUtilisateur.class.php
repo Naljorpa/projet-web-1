@@ -11,6 +11,9 @@ class AdminUtilisateur extends Admin
         'l'           => ['nom'    => 'profileUtilisateur',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
         'a'           => ['nom'    => 'ajouterUtilisateur',   'droits' => [Utilisateur::PROFIL_MEMBRE]],
         'm'           => ['nom'    => 'modifierUtilisateur',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
+        'vt'           => ['nom'    => 'voirTimbres',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
+        've'           => ['nom'    => 'voirEncheres',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
+        'sm'           => ['nom'    => 'suivreMises',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
         'c'           => ['nom'    => 'connecter',            'droits' => [Utilisateur::PROFIL_MEMBRE]],
         's'           => ['nom'    => 'supprimerUtilisateur', 'droits' => [Utilisateur::PROFIL_MEMBRE]],
         'd'           => ['nom'    => 'deconnecter'],
@@ -165,11 +168,11 @@ class AdminUtilisateur extends Admin
     {
 
         $session = $_SESSION['oUtilisateur'];
-        
+
         if (count($_POST) !== 0) {
             $utilisateur = $_POST;
             $oUtilisateur = new Utilisateur($utilisateur);
-           
+
             $erreurs = $oUtilisateur->erreurs;
             if (count($erreurs) === 0) {
                 $oUtilisateur->verifie_courrielId($oUtilisateur);
@@ -177,7 +180,7 @@ class AdminUtilisateur extends Admin
 
             $erreurs = $oUtilisateur->erreurs;
             if (count($erreurs) === 0) {
-              
+
                 if ($this->oRequetesSQL->modifierUtilisateur([
                     'utilisateur_id'    => $session->utilisateur_id,
                     'utilisateur_nom'    => $oUtilisateur->utilisateur_nom,
@@ -191,7 +194,7 @@ class AdminUtilisateur extends Admin
                     $this->classRetour = "erreur";
                     $this->messageRetourAction = "modification de l'utilisateur numéro $this->utilisateur_id non effectuée.";
                 }
-                
+
                 $this->profileUtilisateur($oUtilisateur);
                 exit;
             }
@@ -206,7 +209,7 @@ class AdminUtilisateur extends Admin
             'vModifierUtilisateur',
             array(
                 'oUtilisateur' => $session,
-                'titre'        => "Modifier l'utilisateur $session->utilisateur_prenom"." ". "$session->utilisateur_nom",
+                'titre'        => "Modifier l'utilisateur $session->utilisateur_prenom" . " " . "$session->utilisateur_nom",
                 'erreurs'      => $erreurs
             ),
             'gabarit-frontend'
@@ -220,11 +223,10 @@ class AdminUtilisateur extends Admin
     public function supprimerUtilisateur()
     {
         $session = $_SESSION['oUtilisateur'];
-     
+
         if ($this->oRequetesSQL->supprimerUtilisateur($session->utilisateur_id)) {
             $messageRetourAction = "Suppression de l'utilisateur $session->utilisateur_prenom $session->utilisateur_nom effectuée.";
             $this->simpleDeconnecter();
-           
         } else {
             $this->classRetour = "erreur";
             $messageRetourAction = "Suppression de l'utilisateur $session->utilisateur_prenom $session->utilisateur_nom  non effectuée.";
@@ -233,13 +235,12 @@ class AdminUtilisateur extends Admin
         (new Vue)->generer(
             "vAccueil",
             array(
-              'titre'  => "Accueil",
-              'oUtilisateur'        =>  $session,
-              'messageRetourAction' => $messageRetourAction
+                'titre'  => "Accueil",
+                'oUtilisateur'        =>  $session,
+                'messageRetourAction' => $messageRetourAction
             ),
             "gabarit-frontend"
-          );
-      
+        );
     }
 
     /**
@@ -251,13 +252,12 @@ class AdminUtilisateur extends Admin
         $this->connecter();
     }
 
-      /**
+    /**
      * Déconnecter un utilisateur sans retour à la page de connection
      */
     public function simpleDeconnecter()
     {
         unset($_SESSION['oUtilisateur']);
-        
     }
 
     /**
@@ -282,5 +282,90 @@ class AdminUtilisateur extends Admin
         $retour = (new GestionCourriel)->envoyerMdp($oUtilisateur);
         if ($retour) echo "Courriel envoyé<br>.";
         if (ENV === "DEV") echo "<a href=\"$retour\">Message dans le fichier $retour</a>";
+    }
+
+    /**
+     * Lister les timbres de l'utilisateur
+     * 
+     */
+    public function voirTimbres()
+    {
+
+        if (isset($_SESSION['oUtilisateur'])) {
+            $session = $_SESSION['oUtilisateur'];
+        } else {
+            $session = null;
+        }
+
+        $timbres = $this->oRequetesSQL->getTimbresById([
+            "utilisateur_id" => $session->utilisateur_id
+        ]);
+
+        (new Vue)->generer(
+            "vTimbresUtil",
+            array(
+                'titre'  => "Mes timbres",
+                'oUtilisateur'        =>  $session,
+                'timbres' => $timbres,
+            ),
+            "gabarit-frontend"
+        );
+    }
+
+     /**
+     * Suivre les mises de l'utilisateur
+     * 
+     */
+    public function voirEncheres()
+    {
+
+        if (isset($_SESSION['oUtilisateur'])) {
+            $session = $_SESSION['oUtilisateur'];
+        } else {
+            $session = null;
+        }
+
+        $encheres = $this->oRequetesSQL->getEncheresById([
+            "utilisateur_id" => $session->utilisateur_id
+        ]);
+
+        (new Vue)->generer(
+            "vEncheresUtil",
+            array(
+                'titre'  => "Mes enchères",
+                'oUtilisateur'        =>  $session,
+                'encheres' => $encheres
+            ),
+            "gabarit-frontend"
+        );
+    }
+
+    /**
+     * Suivre les mises de l'utilisateur
+     * 
+     */
+    public function suivreMises()
+    {
+
+        if (isset($_SESSION['oUtilisateur'])) {
+            $session = $_SESSION['oUtilisateur'];
+        } else {
+            $session = null;
+        }
+
+        $mises = $this->oRequetesSQL->getMisesById([
+            "utilisateur_id" => $session->utilisateur_id
+        ]);
+
+
+        (new Vue)->generer(
+            "vMisesUtil",
+            array(
+                'titre'  => "Mes mises",
+                'oUtilisateur'        =>  $session,
+                'mises' => $mises,
+            ),
+            "gabarit-frontend"
+        );
     }
 }

@@ -76,8 +76,20 @@ class RequetesSQL extends RequetesPDO
     return $this->getLignes();
   }
 
-  // LEFT OUTER JOIN mise ON enchere_id = mise_enchere_id and mise_valeur =(select max(mise_valeur) from mise where enchere_id = mise_enchere_id) 
 
+  /**
+   * Update le status du timbre
+   * @return array tableau des lignes produites par la select   
+   */
+  public function updateStatusToArchive($enchere_timbre_id)
+  {
+
+    $this->sql =
+      "UPDATE timbre SET timbre_status_id = 3 WHERE timbre_id = $enchere_timbre_id
+    ";
+
+    return $this->getLignes();
+  }
 
 
 
@@ -96,7 +108,7 @@ class RequetesSQL extends RequetesPDO
        INNER JOIN `condition` ON timbre_condition_id = condition_id
        LEFT OUTER JOIN mise ON mise_enchere_id = enchere_id
        INNER JOIN utilisateur ON enchere_utilisateur_id = utilisateur_id
-        WHERE enchere_id = :enchere_id AND timbre_status_id = " . Timbre::STATUT_ACTIF;
+        WHERE enchere_id = :enchere_id ";
 
     return $this->getLignes(['enchere_id' => $enchere_id], RequetesPDO::UNE_SEULE_LIGNE);
   }
@@ -109,7 +121,7 @@ class RequetesSQL extends RequetesPDO
   public function getTimbresById($champs)
   {
     $this->sql =
-      "SELECT timbre_id, timbre_nom
+      "SELECT timbre_id, timbre_nom, timbre_description, timbre_status_id, timbre_tirage
       FROM timbre
       WHERE timbre_utilisateur_id = :utilisateur_id
     ";
@@ -186,12 +198,12 @@ class RequetesSQL extends RequetesPDO
      ======================== */
 
 
-   /**
+  /**
    * Récupération des mise par l'id de l'enchère
    * @param array $enchere_id tableau des champs
    * @return string|boolean clé primaire de la ligne ajoutée, false sinon
    */
-  
+
   public function getMise($enchere_id)
   {
     $this->sql =
@@ -202,6 +214,35 @@ class RequetesSQL extends RequetesPDO
   ";
 
     return $this->getLignes(['enchere_id' => $enchere_id], RequetesPDO::UNE_SEULE_LIGNE);
+  }
+
+  /**
+   * Récupération des mise par l'id de l'utilisateur
+   * @param array $utilisateur_id tableau des champs
+   * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+   */
+
+  public function getMisesById($champs)
+  {
+    $this->sql =
+      "
+
+       SELECT MAX(mise_valeur) as mise_max, mise_utilisateur_id, mise_enchere_id, timbre_nom, enchere_id, enchere_prix_base, enchere_date_fin, timbre_status_id, image_lien, image_nom, (select MAX(mise_valeur) from mise where mise_enchere_id = enchere_id) as mise_actuel
+       FROM mise
+       INNER JOIN enchere ON mise_enchere_id = enchere_id
+       INNER JOIN timbre ON enchere_timbre_id = timbre_id
+       INNER JOIN image ON image_timbre_id = timbre_id
+       where :utilisateur_id = mise_utilisateur_id
+      group by mise_enchere_id 
+      
+ 
+
+   ";
+
+
+
+
+    return $this->getLignes($champs);
   }
 
 
@@ -232,6 +273,23 @@ class RequetesSQL extends RequetesPDO
     $this->sql = '
       INSERT INTO enchere SET enchere_prix_base = :enchere_prix_base, enchere_date_debut = :enchere_date_debut, enchere_date_fin = :enchere_date_fin, enchere_timbre_id = :enchere_timbre_id, enchere_utilisateur_id = :enchere_utilisateur_id';
     return $this->CUDLigne($champs);
+  }
+
+  /**
+   * Récupération des encheres par l'id utilisateur
+   * @param array $champs tableau des champs
+   * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+   */
+  public function getEncheresById($champs)
+  {
+    $this->sql =
+      "SELECT *
+      FROM enchere
+      INNER join timbre on timbre_id = enchere_timbre_id
+      WHERE enchere_utilisateur_id = :utilisateur_id
+    ";
+
+    return $this->getLignes($champs);
   }
 
 

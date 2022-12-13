@@ -123,6 +123,9 @@ class Frontend extends Routeur
    */
   public function listerEncheres()
   {
+    // print_r($_POST);
+    // if($_POST)
+
     $encheres = $this->oRequetesSQL->getEncheres();
 
     if (isset($_SESSION['oUtilisateur'])) {
@@ -130,6 +133,15 @@ class Frontend extends Routeur
     } else {
       $session = null;
     }
+
+    foreach ($encheres as $enchere) {
+      if($enchere["enchere_date_fin"] <= date('Y-m-d H:i:s')){
+        $this->oRequetesSQL->updateStatusToArchive($enchere["enchere_timbre_id"]);
+      }  
+    }
+
+    $encheres = $this->oRequetesSQL->getEncheres();
+   
 
     (new Vue)->generer(
       "vEncheres",

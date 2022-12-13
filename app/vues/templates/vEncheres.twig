@@ -6,7 +6,6 @@
 	<details class="filtre-responsive">
 		<summary>Filtres de recherche</summary>
 		<aside class="filtre ">
-
 			<form action="get">
 				<h1>Recherche:</h1>
 				<div class="recherche">
@@ -121,10 +120,10 @@
 
 	<aside class="filtre hidden">
 
-		<form action="get">
+		<form method="POST" action="encheres">
 			<h1>Recherche:</h1>
 			<div class="recherche">
-				<input type="search" placeholder="mots-clés" class="search-field">
+				<input type="search" name="recherche" placeholder="mots-clés" class="search-field">
 				<button aria-label="submit" type="submit" class="magnifyer-btn">
 					<img src="assets/images/icones/magnifyer-blue.svg" alt="bouton recherche">
 				</button>
@@ -230,7 +229,7 @@
 
 		</form>
 	</aside>
-	
+
 	<div class="grid-encheres">
 		{% for enchere in encheres %}
 
@@ -245,9 +244,21 @@
 				<small class="temps">
 					<span>Temps Restant:
 					</span>
-					<span>{{ enchere.enchere_date_fin }}</span>
+					<span>
+						{% if enchere.timbre_status_id == 1 %}
+							{% set difference = date(enchere.enchere_date_fin).diff(date(now)) %}
+							{% set leftDays = difference.days %}
+							{% set leftHours = difference.h %}
+							{% set leftMinutes = difference.i %}
+							{{ leftDays }}j
+							{{ leftHours }}h
+							{{ leftMinutes }}min.
+						{% else %}
+							0j 0h 0min.
+						{% endif %}
+					</span>
 				</small>
-				<form  method="POST" action="admin?entite=mise&action=a">
+				<form method="POST" action="admin?entite=mise&action=a">
 					<div class="mise">
 						<div class="depart-actuel">
 							<small>Départ:
@@ -258,21 +269,28 @@
 						</div>
 						<input type="hidden" name="enchere_id" value="{{ enchere.enchere_id }}">
 						<input type="hidden" name="utilisateur_id" value="{{ session.oUtilisateur.utilisateur_id }}">
-						<input type="number" name="mise_valeur" placeholder="$">
+						{% if enchere.timbre_status_id == 1 %}
+							<input type="number" name="mise_valeur" placeholder="$">
+
+						{% else %}
+							<span>Période de mise terminée</span>
+						{% endif %}
 						{# value="{{ mise.mise_valeur }} #}
 					</div>
-					
-					{% if session.oUtilisateur is defined %}
-					<input type="submit" class="btn" value="Miser">
+
+					{% if session.oUtilisateur is defined and enchere.timbre_status_id == 1 %}
+						<input type="submit" class="btn" value="Miser">
+					{% else %}
+						<span></span>
 					{% endif %}
 					{% if session.oUtilisateur is null %}
-					<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>
+						<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>
 					{% endif %}
 				</form>
 			</article>
 		{% endfor %}
 
-
+	</div>
 	</section>
 
 	<section class="abonnez-vous">
