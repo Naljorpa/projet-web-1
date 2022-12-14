@@ -54,7 +54,6 @@
 					<label hidden for="mise">Mise</label>
 					{% if fiche.timbre_status_id == 1 %}
 						<input type="number" name="mise_valeur" placeholder="$">
-						<span class="text-red">{{ erreurs.mise_valeur }}</span>
 					{% else %}
 						<span>Période de mise terminée</span>
 					{% endif %}

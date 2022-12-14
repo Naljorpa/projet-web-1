@@ -18,7 +18,6 @@ class Frontend extends Routeur
   {
     $this->enchere_id = $_GET['enchere_id'] ?? null;
     $this->oRequetesSQL = new RequetesSQL;
-   
   }
 
 
@@ -28,8 +27,8 @@ class Frontend extends Routeur
    */
   public function accueil()
   {
-    $messageRetourAction= "";
-    
+    $messageRetourAction = "";
+
     if (isset($_SESSION['oUtilisateur'])) {
       $session = $_SESSION['oUtilisateur'];
     } else {
@@ -123,8 +122,6 @@ class Frontend extends Routeur
    */
   public function listerEncheres()
   {
-    // print_r($_POST);
-    // if($_POST)
 
     $encheres = $this->oRequetesSQL->getEncheres();
 
@@ -135,23 +132,89 @@ class Frontend extends Routeur
     }
 
     foreach ($encheres as $enchere) {
-      if($enchere["enchere_date_fin"] <= date('Y-m-d H:i:s')){
+      if ($enchere["enchere_date_fin"] <= date('Y-m-d H:i:s')) {
         $this->oRequetesSQL->updateStatusToArchive($enchere["enchere_timbre_id"]);
-      }  
+      }
     }
 
-    $encheres = $this->oRequetesSQL->getEncheres();
-   
+    if ($_POST) {
+      // echo '<pre>', print_r($_POST), '</pre>';
 
-    (new Vue)->generer(
-      "vEncheres",
-      array(
-        'titre'  => "Enchères",
-        'oUtilisateur'        =>  $session,
-        'encheres' => $encheres
-      ),
-      "gabarit-frontend"
-    );
+      if ($_POST["recherche"] != "") {
+        $motRecherche = $_POST["recherche"];
+      } else {
+        $motRecherche = " ";
+      }
+      $anneeMin = $_POST["annee-min"];
+      $anneeMax = $_POST["annee-max"];
+      $prixMin = $_POST["prix-min"];
+      $prixMax = $_POST["prix-max"];
+
+      $newEncheresArray = [];
+      $arrayAnneeMinMax = [];
+      $arrayPrixMinMax = [];
+
+      foreach ($encheres as $enchere) {
+
+        $implodedArray = implode(" ", $enchere);
+
+        if (strpos(strtolower($implodedArray), strtolower($motRecherche))) {
+
+          array_push($newEncheresArray, $enchere);
+        };
+      }
+      if ($anneeMin !== "" && $anneeMax !== "") {
+        foreach ($newEncheresArray as $newEnchere) {
+          $anneeDuTimbre = $newEnchere['timbre_annee'];
+          if ($anneeDuTimbre >= $anneeMin && $anneeDuTimbre <= $anneeMax) {
+
+            array_push($arrayAnneeMinMax, $newEnchere);
+          }
+        }
+        $newEncheresArray = $arrayAnneeMinMax;
+      }
+      
+      if ($prixMin !== "" && $prixMax !== "") {
+        foreach ($newEncheresArray as $newEnchere) {
+          $miseActuelle = $newEnchere['mise_valeur'];
+          if ($miseActuelle >= $prixMin && $miseActuelle <= $prixMax) {
+
+            array_push($arrayPrixMinMax, $newEnchere);
+          }
+        }
+        $newEncheresArray = $arrayPrixMinMax;
+      }
+
+
+      (new Vue)->generer(
+        "vEncheres",
+        array(
+          'titre'  => "Enchères",
+          'oUtilisateur'        =>  $session,
+          'encheres' => $newEncheresArray,
+          'inputRecherche' => $motRecherche,
+          'anneeMin' => $anneeMin,
+          'anneeMax' => $anneeMax,
+          'prixMin' => $prixMin,
+          'prixMax' => $prixMax
+        ),
+        "gabarit-frontend"
+      );
+    } else {
+
+      $encheres = $this->oRequetesSQL->getEncheres();
+
+
+      (new Vue)->generer(
+        "vEncheres",
+        array(
+          'titre'  => "Enchères",
+          'oUtilisateur'        =>  $session,
+          'encheres' => $encheres
+        ),
+        "gabarit-frontend"
+      );
+    }
   }
 
 
@@ -162,7 +225,7 @@ class Frontend extends Routeur
   public function afficherFiche()
   {
     $fiche = false;
-    $miseMax ="";
+    $miseMax = "";
 
     if (!is_null($this->enchere_id)) {
       $fiche = $this->oRequetesSQL->getFiche($this->enchere_id);
@@ -176,7 +239,7 @@ class Frontend extends Routeur
       $session = null;
     }
     $miseActuelle = $this->oRequetesSQL->getMise($this->enchere_id);
-    if($miseActuelle){
+    if ($miseActuelle) {
       $miseMax = $miseActuelle["MAX(mise_valeur)"];
     }
 

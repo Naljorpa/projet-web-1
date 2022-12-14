@@ -7,12 +7,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="Site d'enchères de timbre du Lord Stampee">
 		<link rel="stylesheet" href="/assets/css/main.css">
-		{# <link rel="stylesheet" href="assets/css/main.css"> #}
-		<link rel="preconnect" href="https://fonts.googleapis.com">
+				<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-		<title>{{titre}}</title>
+		<title>Information</title>
 	</head>
 
 	<body>
@@ -31,18 +30,7 @@
 					<div class="navigation-secondaire">
 						<img src="assets/images/icones/account.svg" alt="compte">
 
-						{% if session.oUtilisateur is defined %}
-							<ul>
-								<li>
-									<a href="profile">
-										{{ oUtilisateur.utilisateur_prenom }}
-										{{ oUtilisateur.utilisateur_nom }}
-									</a>
-
-								</li>
-								<a class="deconnect" href="admin?entite=utilisateur&action=d">Déconnecter</a>
-							{% else %}
-								<li>
+														<li>
 									<a href="connexion">Connection</a>
 								</li>
 								<li class="separateur">/</li>
@@ -50,20 +38,19 @@
 									<a href="inscription">Inscription</a>
 								</li>
 							</ul>
-						{% endif %}
-					</div>
+											</div>
 				</nav>
 
 				<nav>
 					<ul class="navigation-principale">
 						<li>
-							<a {% if titre == 'Accueil' %} class="page-active" {% endif %} href="/">Accueil</a>
+							<a  href="/">Accueil</a>
 						</li>
 						<li>
 							<a href="#">Actualités</a>
 						</li>
 						<li>
-							<a {% if titre == 'Enchères' %} class="page-active" {% endif %} href="encheres">Enchères</a>
+							<a  href="encheres">Enchères</a>
 						</li>
 						<li>
 							<a href="#">Archives</a>
@@ -76,10 +63,30 @@
 			</div>
 		</div>
 		<div class="color-bands"></div>
-		<p class="messageRetourAction {{ classRetour }}">{{ messageRetourAction|raw }}&nbsp;</p>
-		<main>
+				<main>
 
-			{{ include(templateMain) }}
+			<section>
+	<p>Bonjour
+		Samwise
+		Gamgee,</p>
+
+	<p>Nous avons le plaisir de vous transmettre votre identifiant de connexion et votre mot de passe pour accéder à l'administration de notre site Stampee Enchères.</p>
+
+	<p>Identifiant:
+		<strong>sam@garden.com</strong>
+	</p>
+	<p>Mot de passe:
+		<strong>c3B9K5T6C5</strong>
+	</p>
+
+	<p>
+		<a href="http://localhost:3000/admin">Cliquez sur ce lien pour accéder à notre interface d'administration</a>
+	</p>
+
+	<p>Cordialement,</p>
+	<p>Support Technique</p>
+</section>
+
 
 		</main>
 		<div class="color-bands-footer"></div>

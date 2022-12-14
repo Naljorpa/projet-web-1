@@ -234,13 +234,7 @@ class RequetesSQL extends RequetesPDO
        INNER JOIN image ON image_timbre_id = timbre_id
        where :utilisateur_id = mise_utilisateur_id
       group by mise_enchere_id 
-      
- 
-
    ";
-
-
-
 
     return $this->getLignes($champs);
   }

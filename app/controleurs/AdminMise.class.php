@@ -37,8 +37,6 @@ class AdminMise extends Admin
 
     $miseActuelle = $this->oRequetesSQL->getMise($enchere_id);
 
-
-
     $mise = [];
     $erreurs = [];
     $nouvelleMise = [];

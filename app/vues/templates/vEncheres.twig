@@ -1,3 +1,6 @@
+<script>
+	history.pushState({}, '', 'encheres')
+</script>
 <span>{{ succes }}</span>
 <span class="text-red">{{ erreurs.mise_valeur }}</span>
 
@@ -9,7 +12,7 @@
 			<form action="get">
 				<h1>Recherche:</h1>
 				<div class="recherche">
-					<input type="search" placeholder="mots-clés" class="search-field">
+					<input type="search" name="recherche" placeholder="mots-clés" class="search-field" value="{{ inputRecherche }}">
 					<button aria-label="submit" type="submit" class="magnifyer-btn">
 						<img src="assets/images/icones/magnifyer-blue.svg" alt="bouton recherche">
 					</button>
@@ -19,98 +22,98 @@
 					<div>
 						<label for="annee-min">De:
 						</label>
-						<input type="text" name="annee-min" id="annee-min-resp" placeholder="$">
+						<input type="text" name="annee-min" id="annee-min-resp" value="{{ anneeMin }}">
 					</div>
 					<div>
 						<label for="annee-max">à:
 						</label>
-						<input type="text" name="annee-max" id="annee-max-resp" placeholder="$">
+						<input type="text" name="annee-max" id="annee-max-resp" value="{{ anneeMax }}">
 					</div>
 				</div>
 				<div class="annee-prix">
-					<h1>Prix:</h1>
+					<h1>Mise actuelle:</h1>
 					<div>
 						<label for="prix-min">De:
 						</label>
-						<input type="text" name="prix-min" id="prix-min-resp" placeholder="$">
+						<input type="text" name="prix-min" id="prix-min" value="{{ prixMin }}" placeholder="$">
 					</div>
 					<div>
 						<label for="prix-max">à:
 						</label>
-						<input type="text" name="prix-max" id="prix-max-resp" placeholder="$">
+						<input type="text" name="prix-max" id="prix-max" value="{{ prixMax }}" placeholder="$">
 					</div>
 				</div>
-				<div class="region">
-					<h1>Région:</h1>
-
-					<label class="container">Royaume-Uni
-						<input type="checkbox" checked="checked">
-					</label>
-
-					<label class="container">Afrique
-						<input type="checkbox">
-					</label>
-
-					<label class="container">Asie
-						<input type="checkbox">
-					</label>
-
-					<label class="container">Caraïbe
-						<input type="checkbox">
-					</label>
-					<label class="container">Europe
-						<input type="checkbox">
-					</label>
-					<label class="container">Moyen-Orient
-						<input type="checkbox">
-					</label>
-					<label class="container">Amérique-du-Nord
-						<input type="checkbox">
-					</label>
-					<label class="container">Australie et Pacifique
-						<input type="checkbox">
-					</label>
-					<label class="container">Îles Atlantique-Sud
-						<input type="checkbox">
-					</label>
-					<label class="container">Autres régions
-						<input type="checkbox">
-					</label>
-				</div>
-				<div>
-					<h1>Condition:</h1>
-					<label class="container">Menthe
-						<input type="checkbox">
-					</label>
-					<label class="container">Inutilisé
-						<input type="checkbox">
-					</label>
-					<label class="container">Utilisé
-						<input type="checkbox">
-					</label>
-				</div>
-				<div class="favoris">
-					<h1>
-						Les favoris du Lord:
-					</h1>
-					<label for="autres-resp" class="container">Je désire voir les favoris du Lord
-						<input type="checkbox" name="autres" id="autres-resp">
-					</label>
-
-				</div>
-				<div>
-					<h1>
-						Timbres affichés:
-					</h1>
-					<input type="radio" id="6timbre-resp" name="nb-display" value="6">
-					<label for="6timbre-resp">6</label>
-					<input type="radio" id="12timbre-resp" name="nb-display" value="12">
-					<label for="12timbre-resp">12</label>
-					<input type="radio" id="24timbre-resp" name="nb-display" value="24">
-					<label for="24timbre-resp">24</label>
-					<input type="radio" id="48timbre-resp" name="nb-display" value="48">
-					<label for="48timbre-resp">48</label>
-				</div>
+				{# <div class="region">
+									<h1>Région:</h1>
+				
+									<label class="container">Royaume-Uni
+										<input type="checkbox" checked="checked">
+									</label>
+				
+									<label class="container">Afrique
+										<input type="checkbox">
+									</label>
+				
+									<label class="container">Asie
+										<input type="checkbox">
+									</label>
+				
+									<label class="container">Caraïbe
+										<input type="checkbox">
+									</label>
+									<label class="container">Europe
+										<input type="checkbox">
+									</label>
+									<label class="container">Moyen-Orient
+										<input type="checkbox">
+									</label>
+									<label class="container">Amérique-du-Nord
+										<input type="checkbox">
+									</label>
+									<label class="container">Australie et Pacifique
+										<input type="checkbox">
+									</label>
+									<label class="container">Îles Atlantique-Sud
+										<input type="checkbox">
+									</label>
+									<label class="container">Autres régions
+										<input type="checkbox">
+									</label>
+								</div>
+								<div>
+									<h1>Condition:</h1>
+									<label class="container">Menthe
+										<input type="checkbox">
+									</label>
+									<label class="container">Inutilisé
+										<input type="checkbox">
+									</label>
+									<label class="container">Utilisé
+										<input type="checkbox">
+									</label>
+								</div>
+								<div class="favoris">
+									<h1>
+										Les favoris du Lord:
+									</h1>
+									<label for="autres-resp" class="container">Je désire voir les favoris du Lord
+										<input type="checkbox" name="autres" id="autres-resp">
+									</label>
+				
+								</div>
+								<div>
+									<h1>
+										Timbres affichés:
+									</h1>
+									<input type="radio" id="6timbre-resp" name="nb-display" value="6">
+									<label for="6timbre-resp">6</label>
+									<input type="radio" id="12timbre-resp" name="nb-display" value="12">
+									<label for="12timbre-resp">12</label>
+									<input type="radio" id="24timbre-resp" name="nb-display" value="24">
+									<label for="24timbre-resp">24</label>
+									<input type="radio" id="48timbre-resp" name="nb-display" value="48">
+									<label for="48timbre-resp">48</label>
+								</div> #}
 				<button type="submit" class="btn">Rechercher</button>
 
 			</form>
@@ -123,7 +126,7 @@
 		<form method="POST" action="encheres">
 			<h1>Recherche:</h1>
 			<div class="recherche">
-				<input type="search" name="recherche" placeholder="mots-clés" class="search-field">
+				<input type="search" name="recherche" placeholder="mots-clés" class="search-field" value="{{ inputRecherche }}">
 				<button aria-label="submit" type="submit" class="magnifyer-btn">
 					<img src="assets/images/icones/magnifyer-blue.svg" alt="bouton recherche">
 				</button>
@@ -133,98 +136,98 @@
 				<div>
 					<label for="annee-min">De:
 					</label>
-					<input type="text" name="annee-min" id="annee-min" placeholder="$">
+					<input type="text" name="annee-min" id="annee-min" value="{{ anneeMin }}">
 				</div>
 				<div>
 					<label for="annee-max">à:
 					</label>
-					<input type="text" name="annee-max" id="annee-max" placeholder="$">
+					<input type="text" name="annee-max" id="annee-max" value="{{ anneeMax }}">
 				</div>
 			</div>
 			<div class="annee-prix">
-				<h1>Prix:</h1>
+				<h1>Mise actuelle:</h1>
 				<div>
 					<label for="prix-min">De:
 					</label>
-					<input type="text" name="prix-min" id="prix-min" placeholder="$">
+					<input type="text" name="prix-min" id="prix-min" value="{{ prixMin }}" placeholder="$">
 				</div>
 				<div>
 					<label for="prix-max">à:
 					</label>
-					<input type="text" name="prix-max" id="prix-max" placeholder="$">
+					<input type="text" name="prix-max" id="prix-max" value="{{ prixMax }}" placeholder="$">
 				</div>
 			</div>
-			<div class="region">
-				<h1>Région:</h1>
-
-				<label class="container">Royaume-Uni
-					<input type="checkbox" checked="checked">
-				</label>
-
-				<label class="container">Afrique
-					<input type="checkbox">
-				</label>
-
-				<label class="container">Asie
-					<input type="checkbox">
-				</label>
-
-				<label class="container">Caraïbe
-					<input type="checkbox">
-				</label>
-				<label class="container">Europe
-					<input type="checkbox">
-				</label>
-				<label class="container">Moyen-Orient
-					<input type="checkbox">
-				</label>
-				<label class="container">Amérique-du-Nord
-					<input type="checkbox">
-				</label>
-				<label class="container">Australie et Pacifique
-					<input type="checkbox">
-				</label>
-				<label class="container">Îles Atlantique-Sud
-					<input type="checkbox">
-				</label>
-				<label class="container">Autres régions
-					<input type="checkbox">
-				</label>
-			</div>
-			<div>
-				<h1>Condition:</h1>
-				<label class="container">Menthe
-					<input type="checkbox">
-				</label>
-				<label class="container">Inutilisé
-					<input type="checkbox">
-				</label>
-				<label class="container">Utilisé
-					<input type="checkbox">
-				</label>
-			</div>
-			<div class="favoris">
-				<h1>
-					Les favoris du Lord:
-				</h1>
-				<label for="autres" class="container">Je désire voir les favoris du Lord
-					<input type="checkbox" name="autres" id="autres">
-				</label>
-
-			</div>
-			<div>
-				<h1>
-					Timbres affichés:
-				</h1>
-				<input type="radio" id="6timbre" name="nb-display" value="6">
-				<label for="6timbre">6</label>
-				<input type="radio" id="12timbre" name="nb-display" value="12">
-				<label for="12timbre">12</label>
-				<input type="radio" id="24timbre" name="nb-display" value="24">
-				<label for="24timbre">24</label>
-				<input type="radio" id="48timbre" name="nb-display" value="48">
-				<label for="48timbre">48</label>
-			</div>
+			{# <div class="region">
+							<h1>Région:</h1>
+			
+							<label class="container">Royaume-Uni
+								<input type="checkbox" checked="checked">
+							</label>
+			
+							<label class="container">Afrique
+								<input type="checkbox">
+							</label>
+			
+							<label class="container">Asie
+								<input type="checkbox">
+							</label>
+			
+							<label class="container">Caraïbe
+								<input type="checkbox">
+							</label>
+							<label class="container">Europe
+								<input type="checkbox">
+							</label>
+							<label class="container">Moyen-Orient
+								<input type="checkbox">
+							</label>
+							<label class="container">Amérique-du-Nord
+								<input type="checkbox">
+							</label>
+							<label class="container">Australie et Pacifique
+								<input type="checkbox">
+							</label>
+							<label class="container">Îles Atlantique-Sud
+								<input type="checkbox">
+							</label>
+							<label class="container">Autres régions
+								<input type="checkbox">
+							</label>
+						</div>
+						<div>
+							<h1>Condition:</h1>
+							<label class="container">Menthe
+								<input type="checkbox">
+							</label>
+							<label class="container">Inutilisé
+								<input type="checkbox">
+							</label>
+							<label class="container">Utilisé
+								<input type="checkbox">
+							</label>
+						</div>
+						<div class="favoris">
+							<h1>
+								Les favoris du Lord:
+							</h1>
+							<label for="autres" class="container">Je désire voir les favoris du Lord
+								<input type="checkbox" name="autres" id="autres">
+							</label>
+			
+						</div>
+						<div>
+							<h1>
+								Timbres affichés:
+							</h1>
+							<input type="radio" id="6timbre" name="nb-display" value="6">
+							<label for="6timbre">6</label>
+							<input type="radio" id="12timbre" name="nb-display" value="12">
+							<label for="12timbre">12</label>
+							<input type="radio" id="24timbre" name="nb-display" value="24">
+							<label for="24timbre">24</label>
+							<input type="radio" id="48timbre" name="nb-display" value="48">
+							<label for="48timbre">48</label>
+						</div> #}
 			<button type="submit" class="btn">Rechercher</button>
 
 		</form>
@@ -291,15 +294,15 @@
 		{% endfor %}
 
 	</div>
-	</section>
+</section>
 
-	<section class="abonnez-vous">
-		<article class="boite-action">
-			<h1>Abonnez-vous à notre infolettre</h1>
-			<p>Restez à l’affut des enchères les plus récente et de l’arrivé de timbres rares et d’exceptions</p>
-			<form action="post" class="btns-box-abonnement">
-				<input type="email" placeholder="Entrez votre courriel">
-				<button class="btn-big">S'abonner</button>
-			</form>
-		</article>
-	</section>
+<section class="abonnez-vous">
+	<article class="boite-action">
+		<h1>Abonnez-vous à notre infolettre</h1>
+		<p>Restez à l’affut des enchères les plus récente et de l’arrivé de timbres rares et d’exceptions</p>
+		<form action="post" class="btns-box-abonnement">
+			<input type="email" placeholder="Entrez votre courriel">
+			<button class="btn-big">S'abonner</button>
+		</form>
+	</article>
+</section>
