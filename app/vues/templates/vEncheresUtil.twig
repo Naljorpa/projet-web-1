@@ -7,6 +7,7 @@
 		<div class="t">Début</div>
 		<div class="t">Fin</div>
 		<div class="t">Status</div>
+		<div class="t">Actions</div>
 		{% for enchere in encheres %}
 			<div class="l">
 				<div class="c dr">{{ enchere.enchere_id }}</div>
@@ -26,6 +27,7 @@
 						archivé
 					{% endif %}
 				</div>
+				<div class="c   ">modifier</div>
 			</div>
 		{% endfor %}
 	</div>

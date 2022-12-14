@@ -79,3 +79,8 @@
     gap:30px;
     line-height: 18px;
 }
+
+.mes-timbres .modifier:hover{
+    color: var(--oldred);
+    text-decoration: underline;
+}

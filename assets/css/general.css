@@ -115,7 +115,7 @@ input {
 }
 
 .g.timbres {
-    grid-template-columns: repeat(5, max-content);
+    grid-template-columns: repeat(6, max-content);
     
 }
 
@@ -176,6 +176,7 @@ input {
 .c span:hover {
     color: rgb(0, 73, 207);
 }
+
 
 
 /* grille d'encheres*/

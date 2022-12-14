@@ -46,11 +46,11 @@
 				<span class="text-red">{{ erreurs.timbre_annee}}</span>
 
 				<label>Description</label>
-				<textarea rows="4" cols="50" name="timbre_description"></textarea>
+				<textarea rows="4" cols="50" name="timbre_description">{{ timbre.timbre_description }}</textarea>
 				<span class="text-red">{{ erreurs.timbre_description }}</span>
 
 				<label>Histoire</label>
-				<textarea rows="4" cols="50" name="timbre_histoire" value="{{ timbre.timbre_histoire }}"></textarea>
+				<textarea rows="4" cols="50" name="timbre_histoire">{{ timbre.timbre_histoire }}</textarea>
 				<span class="text-red">{{ erreurs.timbre_histoire }}</span>
 			</div>
 			<div>

@@ -8,6 +8,7 @@
 		<div class="t">Tirage
 		</div>
 		<div class="t">Status</div>
+		<div class="t">Actions</div>
 		{% for timbre in timbres %}
 			<div class="l">
 				<div class="c dr">{{ timbre.timbre_id }}</div>
@@ -27,6 +28,7 @@
 						archivé
 					{% endif %}
 				</div>
+				<div class="c   "><a class="modifier" href="admin?entite=timbre&action=m&timbre_id={{ timbre.timbre_id }}">modifier</a></div>
 			</div>
 		{% endfor %}
 	</div>

@@ -129,6 +129,24 @@ class RequetesSQL extends RequetesPDO
     return $this->getLignes($champs);
   }
 
+   /**
+   * Récupération des timbres par l'id du timbre
+   * @param array $champs tableau des champs
+   * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+   */
+  public function getTimbre($champs)
+  {
+    $this->sql =
+      "SELECT * 
+      FROM timbre
+       INNER JOIN pays ON timbre_pays_id = pays_id
+       INNER JOIN `condition` ON timbre_condition_id = condition_id
+      WHERE timbre_id = :timbre_id
+    ";
+
+    return $this->getLignes($champs);
+  }
+
   /**
    * Récupération de tous les timbres
    * @param array $champs tableau des champs
@@ -286,6 +304,23 @@ class RequetesSQL extends RequetesPDO
     return $this->getLignes($champs);
   }
 
+  /**
+   * Récupération des l'enchere par l'id de la mise_enchere_id
+   * @param array $mise_enchere_id tableau des champs
+   * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+   */
+
+   public function getEnchere($mise_enchere_id)
+   {
+     $this->sql =
+       "SELECT *
+     FROM enchere
+     where enchere_id = :mise_enchere_id 
+    group by enchere_id 
+   ";
+ 
+     return $this->getLignes(['mise_enchere_id' => $mise_enchere_id], RequetesPDO::UNE_SEULE_LIGNE);
+   }
 
 
   /* GESTION DES UTILISATEURS 

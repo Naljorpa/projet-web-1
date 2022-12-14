@@ -7,9 +7,20 @@
 class AdminTimbre extends Admin
 {
     protected $methodes = [
-        'a'           => ['nom'    => 'ajouterTimbre',  'droits' => [Utilisateur::PROFIL_MEMBRE]]
+        'a'           => ['nom'    => 'ajouterTimbre',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
+        'm'           => ['nom'    => 'modifierTimbre',  'droits' => [Utilisateur::PROFIL_MEMBRE]]
     ];
 
+    /**
+     * Constructeur qui initialise des propriétés à partir du query string
+     * et la propriété oRequetesSQL déclarée dans la classe Routeur
+     * 
+     */
+    public function __construct()
+    {
+        $this->timbre_id = $_GET['timbre_id'] ?? null;
+        $this->oRequetesSQL = new RequetesSQL;
+    }
 
 
 
@@ -47,7 +58,7 @@ class AdminTimbre extends Admin
 
             $date = new DateTimeImmutable();
 
-            if($_FILES){
+            if ($_FILES) {
                 $nom_fichier = $_FILES['userfile']['name'];
                 $fichier = $_FILES['userfile']['tmp_name'];
                 $taille = $_FILES['userfile']['size'];
@@ -81,7 +92,7 @@ class AdminTimbre extends Admin
                         'timbre_status_id' => $oTimbre->timbre_status_id,
                         'timbre_utilisateur_id' => $oTimbre->timbre_utilisateur_id
                     ]);
-                    
+
                     $listeTimbreById = $this->oRequetesSQL->getTimbresById([
                         "utilisateur_id" => $session->utilisateur_id
                     ]);
@@ -99,7 +110,7 @@ class AdminTimbre extends Admin
 
 
                     if ($nouvelleImage > 0) { // test de la clé de l'utilisateur ajouté
-                        
+
                     }
                 } else {
                     $erreurImage = "Vous devez inclure une image";
@@ -144,6 +155,78 @@ class AdminTimbre extends Admin
                 'erreurs'             => $erreurs,
                 'erreurImage'         => $erreurImage
             ),
+            'gabarit-frontend'
+        );
+    }
+
+    /**
+     * Modifier un timbre
+     */
+    public function modifierTimbre()
+    {
+        if (isset($_SESSION['oUtilisateur'])) {
+            $session = $_SESSION['oUtilisateur'];
+        } else {
+            $session = null;
+        }
+
+        $pays = $this->oRequetesSQL->getPays();
+        $condition =  $this->oRequetesSQL->getCondition();
+        $status =  $this->oRequetesSQL->getStatus();
+
+        if (!preg_match('/^\d+$/', $this->timbre_id))
+            throw new Exception("Numéro de timbre non renseigné pour une modification");
+
+        $timbre = $this->oRequetesSQL->getTimbre(
+            [
+                "timbre_id" => $this->timbre_id
+            ]
+            );
+
+        echo '<pre>',print_r($timbre),'</pre>';
+
+        if (count($_POST) !== 0) {
+            $timbre = $_POST;
+            $oTimbre = new Timbre($timbre);
+            //   $oUtilisateur->courrielExiste();
+            //   $erreurs = $oUtilisateur->erreurs;
+            //   if (count($erreurs) === 0) {
+            //     $retour = $this->oRequetesSQL->modifierUtilisateur([
+            //       'utilisateur_id'       => $oUtilisateur->utilisateur_id, 
+            //       'utilisateur_courriel' => $oUtilisateur->utilisateur_courriel,
+            //       'utilisateur_nom'      => $oUtilisateur->utilisateur_nom,
+            //       'utilisateur_prenom'   => $oUtilisateur->utilisateur_prenom,
+            //       'utilisateur_profil'   => $oUtilisateur->utilisateur_profil
+            //     ]);
+            //     if ($retour !== Utilisateur::ERR_COURRIEL_EXISTANT) {
+            //       if ($retour === true)  {
+            //         $this->messageRetourAction = "Modification de l'utilisateur numéro $this->utilisateur_id effectuée.";    
+            //       } else {  
+            //         $this->classRetour = "erreur";
+            //         $this->messageRetourAction = "Modification de l'utilisateur numéro $this->utilisateur_id non effectuée.";
+            //       }
+            //       $this->listerUtilisateurs();
+            //       exit;
+            //     } else {
+            //       $erreurs['utilisateur_courriel'] = $retour;
+            //     }
+            //   }
+            // } else {
+            //   $utilisateur = $this->oRequetesSQL->getUtilisateur($this->utilisateur_id);
+            //   $erreurs = [];
+        }
+
+        (new Vue)->generer(
+            'vModifierTimbre',
+            [
+                'oUtilisateur'        =>  $session,
+                'titre'       => "Modifier le timbre numéro $this->timbre_id",
+                'timbre' => $timbre,
+                'pays'                => $pays,
+                'condition'           => $condition,
+                'status'              => $status,
+                // 'erreurs'     => $erreurs
+            ],
             'gabarit-frontend'
         );
     }

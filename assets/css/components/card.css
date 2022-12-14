@@ -106,3 +106,8 @@
 .card .derniere-mise{
     text-align: right;
 }
+
+.card .connect-enchere{
+    display: block;
+    margin-top: var(--spacing-S);
+}
