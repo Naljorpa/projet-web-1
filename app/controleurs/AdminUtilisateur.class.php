@@ -54,7 +54,7 @@ class AdminUtilisateur extends Admin
         }
 
 
-        $listeTimbreById = $this->oRequetesSQL->getTimbres([
+        $listeTimbreById = $this->oRequetesSQL->getTimbresById([
             "utilisateur_id" => $oUtilisateur->utilisateur_id
         ]);
 

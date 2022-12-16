@@ -529,7 +529,7 @@ class RequetesSQL extends RequetesPDO
   public function getFavorisById($champs)
   {
     $this->sql =
-    "SELECT *
+      "SELECT *
       FROM favoris
       INNER join enchere on enchere_id = favoris_enchere_id
       INNER JOIN timbre ON enchere_timbre_id = timbre_id

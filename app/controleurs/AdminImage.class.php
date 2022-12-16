@@ -5,12 +5,12 @@
  */
 
 class AdminImage extends Admin
-{   
-    protected $methodes = [
-        'a'           => ['nom'    => 'ajouterImage',  'droits' => [Utilisateur::PROFIL_MEMBRE]]
-    ];
-    
-    /**
+{
+  protected $methodes = [
+    'a'           => ['nom'    => 'ajouterImage',  'droits' => [Utilisateur::PROFIL_MEMBRE]]
+  ];
+
+  /**
    * Ajouter un image sur le server et le lien dans la banque de données
    */
   public function ajouterImage()
@@ -43,8 +43,6 @@ class AdminImage extends Admin
 
       $listeTimbre = $this->oRequetesSQL->getTimbres();
 
-      // $image_nom = $_POST["image_nom"];
-      // $image_timbre_id = $_POST["image_timbre_id"];
       $image_lien = "assets/images/timbres/" . $date->getTimestamp() . "_" . $nom_fichier;
 
       $image_lienArray = ["image_lien" => $image_lien];
@@ -92,7 +90,4 @@ class AdminImage extends Admin
       );
     }
   }
-
-
-
 }

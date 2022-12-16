@@ -7,19 +7,19 @@
 class AdminMise extends Admin
 {
 
-    protected $methodes =   [
-        'a' => [
-            'nom' => 'ajouterMise', 'droits' => [Utilisateur::PROFIL_MEMBRE]
-        ],
-        'af' => [
-            'nom' => 'ajouterMiseFiche', 'droits' => [Utilisateur::PROFIL_MEMBRE]
-        ],
-        'l' => [
-            'nom' => 'listerMise', 'droits' => [Utilisateur::PROFIL_MEMBRE]
-        ]
-    ];
+  protected $methodes =   [
+    'a' => [
+      'nom' => 'ajouterMise', 'droits' => [Utilisateur::PROFIL_MEMBRE]
+    ],
+    'af' => [
+      'nom' => 'ajouterMiseFiche', 'droits' => [Utilisateur::PROFIL_MEMBRE]
+    ],
+    'l' => [
+      'nom' => 'listerMise', 'droits' => [Utilisateur::PROFIL_MEMBRE]
+    ]
+  ];
 
-    /**
+  /**
    * Ajouter une mise à partir de la page enchères
    */
   public function ajouterMise()
@@ -142,7 +142,4 @@ class AdminMise extends Admin
       "gabarits/gabarit-frontend"
     );
   }
-
-
-
 }

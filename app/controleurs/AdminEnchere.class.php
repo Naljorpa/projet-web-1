@@ -113,14 +113,14 @@ class AdminEnchere extends Admin
       $session = null;
     }
 
-    
+
     if ($this->oRequetesSQL->supprimerEnchere($this->enchere_id)) {
       $this->messageRetourAction = "Suppression de l'enchère effectuée";
     } else {
       $this->classRetour = "erreur";
       $this->messageRetourAction = "Suppression du timbre non effectuée.";
     }
-    
+
     $encheres = $this->oRequetesSQL->getEncheresById([
       "utilisateur_id" => $session->utilisateur_id
     ]);
@@ -132,7 +132,7 @@ class AdminEnchere extends Admin
         'encheres' => $encheres,
         'messageRetourAction' => $this->messageRetourAction,
         'classRetour' => $this->classRetour
-      ), 
+      ),
       "gabarits/gabarit-frontend"
     );
   }

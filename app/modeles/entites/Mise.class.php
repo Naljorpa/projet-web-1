@@ -98,7 +98,6 @@ class Mise
       if ($mise_valeur <= $derniereMise["MAX(mise_valeur)"]) {
         $this->erreurs['mise_valeur']  = "La mise doit être plus élevé que la mise actuelle";
       }
-     
     } else if ($derniereMise == false) {
       if (!preg_match('/^\d+$/', $mise_valeur)) {
         $this->erreurs['mise_valeur'] = 'La mise doit être de format valide.';

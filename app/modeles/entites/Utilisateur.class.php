@@ -156,7 +156,7 @@ class Utilisateur
     $this->utilisateur_profile_id = $utilisateur_profile_id;
   }
 
-   /**
+  /**
    * Mutateur de la propriété utilisateur_profil
    * @param string $utilisateur_profil
    * @return $this

@@ -173,7 +173,7 @@ class Frontend extends Routeur
         }
         $newEncheresArray = $arrayAnneeMinMax;
       }
-      
+
       if ($prixMin !== "" && $prixMax !== "") {
         foreach ($newEncheresArray as $newEnchere) {
           $miseActuelle = $newEnchere['mise_valeur'];

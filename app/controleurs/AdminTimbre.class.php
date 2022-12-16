@@ -186,8 +186,8 @@ class AdminTimbre extends Admin
 
             $oTimbre = new Timbre($timbre);
 
-              $erreurs = $oTimbre->erreurs;
-              if (count($erreurs) === 0) {
+            $erreurs = $oTimbre->erreurs;
+            if (count($erreurs) === 0) {
                 if ($this->oRequetesSQL->modifierTimbre([
                     'timbre_id'     => $oTimbre->timbre_id,
                     'timbre_nom'    => $oTimbre->timbre_nom,
@@ -207,7 +207,6 @@ class AdminTimbre extends Admin
                     $this->classRetour = "erreur";
                     $this->messageRetourAction = "modification du timbre numéro $oTimbre->timbre_id non effectuée.";
                 }
-
             }
         }
 
