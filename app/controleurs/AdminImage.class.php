@@ -74,7 +74,7 @@ class AdminImage extends Admin
       }
 
       (new Vue)->generer(
-        'vProfile',
+        'admin/vProfile',
         array(
           'oUtilisateur'        =>  $session,
           'titre'               => 'Profile d\'utilisateur',
@@ -88,7 +88,7 @@ class AdminImage extends Admin
           'erreurImage'         => $erreurImage,
           'ajouterImage'        => $ajouterImage
         ),
-        'gabarit-frontend'
+        'gabarits/gabarit-frontend'
       );
     }
   }

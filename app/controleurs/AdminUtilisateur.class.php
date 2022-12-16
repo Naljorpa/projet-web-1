@@ -14,6 +14,9 @@ class AdminUtilisateur extends Admin
         'vt'           => ['nom'    => 'voirTimbres',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
         've'           => ['nom'    => 'voirEncheres',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
         'sm'           => ['nom'    => 'suivreMises',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
+        'se'           => ['nom'    => 'suivreEnchere',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
+        'ves'           => ['nom'    => 'voirEncheresSuivies',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
+        'nse'           => ['nom'    => 'plusSuivreEnchere',  'droits' => [Utilisateur::PROFIL_MEMBRE]],
         'c'           => ['nom'    => 'connecter',            'droits' => [Utilisateur::PROFIL_MEMBRE]],
         's'           => ['nom'    => 'supprimerUtilisateur', 'droits' => [Utilisateur::PROFIL_MEMBRE]],
         'd'           => ['nom'    => 'deconnecter'],
@@ -28,6 +31,7 @@ class AdminUtilisateur extends Admin
     public function __construct()
     {
         $this->utilisateur_id = $_GET['utilisateur_id'] ?? null;
+        $this->enchere_id = $_GET['enchere_id'] ?? null;
         $this->oRequetesSQL = new RequetesSQL;
     }
 
@@ -57,7 +61,7 @@ class AdminUtilisateur extends Admin
         $listeTimbre = $this->oRequetesSQL->getTimbres();
 
         (new Vue)->generer(
-            'vProfile',
+            'admin/vProfile',
             array(
                 'oUtilisateur'        => $oUtilisateur,
                 'titre'               => 'Profile d\'utilisateur',
@@ -69,7 +73,7 @@ class AdminUtilisateur extends Admin
                 'classRetour'         => $this->classRetour,
                 'messageRetourAction' => $this->messageRetourAction
             ),
-            'gabarit-frontend'
+            'gabarits/gabarit-frontend'
         );
     }
 
@@ -120,14 +124,14 @@ class AdminUtilisateur extends Admin
         }
 
         (new Vue)->generer(
-            'vInscription',
+            'frontend/vInscription',
             array(
                 'oUtilisateur' => $utilisateur,
                 'titre'        => 'Inscription',
                 'utilisateur'       => $utilisateur,
                 'erreurs'      => $erreurs
             ),
-            'gabarit-frontend'
+            'gabarits/gabarit-frontend'
         );
     }
 
@@ -152,12 +156,12 @@ class AdminUtilisateur extends Admin
         }
 
         (new Vue)->generer(
-            'vConnection',
+            'frontend/vConnection',
             array(
                 'titre'                  => 'Connexion',
                 'messageErreurConnexion' => $messageErreurConnexion
             ),
-            'gabarit-frontend'
+            'gabarits/gabarit-frontend'
         );
     }
 
@@ -206,13 +210,13 @@ class AdminUtilisateur extends Admin
         }
 
         (new Vue)->generer(
-            'vModifierUtilisateur',
+            'admin/vModifierUtilisateur',
             array(
                 'oUtilisateur' => $session,
                 'titre'        => "Modifier l'utilisateur $session->utilisateur_prenom" . " " . "$session->utilisateur_nom",
                 'erreurs'      => $erreurs
             ),
-            'gabarit-frontend'
+            'gabarits/gabarit-frontend'
         );
     }
 
@@ -233,13 +237,13 @@ class AdminUtilisateur extends Admin
         }
 
         (new Vue)->generer(
-            "vAccueil",
+            "frontend/vAccueil",
             array(
                 'titre'  => "Accueil",
                 'oUtilisateur'        =>  $session,
                 'messageRetourAction' => $messageRetourAction
             ),
-            "gabarit-frontend"
+            "gabarits/gabarit-frontend"
         );
     }
 
@@ -302,18 +306,18 @@ class AdminUtilisateur extends Admin
         ]);
 
         (new Vue)->generer(
-            "vTimbresUtil",
+            "admin/vTimbresUtil",
             array(
                 'titre'  => "Mes timbres",
                 'oUtilisateur'        =>  $session,
                 'timbres' => $timbres,
             ),
-            "gabarit-frontend"
+            "gabarits/gabarit-frontend"
         );
     }
 
-     /**
-     * Suivre les mises de l'utilisateur
+    /**
+     * Voir les encheres de l'utilisateur
      * 
      */
     public function voirEncheres()
@@ -329,14 +333,24 @@ class AdminUtilisateur extends Admin
             "utilisateur_id" => $session->utilisateur_id
         ]);
 
+        foreach ($encheres as $enchere) {
+            if ($enchere["enchere_date_fin"] <= date('Y-m-d H:i:s')) {
+                $this->oRequetesSQL->updateStatusToArchive($enchere["enchere_timbre_id"]);
+            }
+        }
+
+        $encheres = $this->oRequetesSQL->getEncheresById([
+            "utilisateur_id" => $session->utilisateur_id
+        ]);
+
         (new Vue)->generer(
-            "vEncheresUtil",
+            "admin/vEncheresUtil",
             array(
                 'titre'  => "Mes enchères",
                 'oUtilisateur'        =>  $session,
                 'encheres' => $encheres
             ),
-            "gabarit-frontend"
+            "gabarits/gabarit-frontend"
         );
     }
 
@@ -359,13 +373,115 @@ class AdminUtilisateur extends Admin
 
 
         (new Vue)->generer(
-            "vMisesUtil",
+            "admin/vMisesUtil",
             array(
                 'titre'  => "Mes mises",
                 'oUtilisateur'        =>  $session,
                 'mises' => $mises,
             ),
-            "gabarit-frontend"
+            "gabarits/gabarit-frontend"
         );
+    }
+
+    /**
+     * Voir les encheres suivies
+     * 
+     */
+    public function voirEncheresSuivies()
+    {
+
+        if (isset($_SESSION['oUtilisateur'])) {
+            $session = $_SESSION['oUtilisateur'];
+        } else {
+            $session = null;
+        }
+
+        $favoris = $this->oRequetesSQL->getFavorisById([
+            "utilisateur_id" => $session->utilisateur_id
+        ]);
+
+
+        (new Vue)->generer(
+            "admin/vEncheresSuiviesUtil",
+            array(
+                'titre'  => "Les enchères que je suis",
+                'oUtilisateur'        =>  $session,
+                'favoris' => $favoris,
+            ),
+            "gabarits/gabarit-frontend"
+        );
+    }
+
+
+
+    /**
+     * Suivre un enchere(favoris) par l'utilisateur
+     * 
+     */
+    public function suivreEnchere()
+    {
+
+        if (isset($_SESSION['oUtilisateur'])) {
+            $session = $_SESSION['oUtilisateur'];
+        } else {
+            $session = null;
+        }
+
+        $ids = ["favoris_utilisateur_id" => $session->utilisateur_id, "favoris_enchere_id" =>  $this->enchere_id];
+
+        $oFavoris = new Favoris($ids);
+
+        $listeFavoris = $this->oRequetesSQL->getFavoris();
+
+        $exist = false;
+
+        $erreurs = $oFavoris->erreurs;
+        if (count($erreurs) === 0) {
+            foreach ($listeFavoris as $favoris) {
+                if ($favoris['favoris_utilisateur_id'] == $session->utilisateur_id && $favoris['favoris_enchere_id'] == $this->enchere_id) {
+                    $exist = true;
+                    exit;
+                };
+            }
+            if ($exist == false) {
+                $this->oRequetesSQL->ajouterFavoris([
+                    "favoris_utilisateur_id" => $oFavoris->favoris_utilisateur_id,
+                    "favoris_enchere_id" => $oFavoris->favoris_enchere_id
+                ]);
+            }
+        }
+
+        $retourFiche = new Frontend;
+        $retourFiche->afficherFiche();
+    }
+
+
+    /**
+     *  Arreter de suivre un enchere (favoris) par l'utilisateur
+     * 
+     */
+    public function plusSuivreEnchere()
+    {
+
+        if (isset($_SESSION['oUtilisateur'])) {
+            $session = $_SESSION['oUtilisateur'];
+        } else {
+            $session = null;
+        }
+
+        $ids = ["favoris_utilisateur_id" => $session->utilisateur_id, "favoris_enchere_id" =>  $this->enchere_id];
+
+        $oFavoris = new Favoris($ids);
+
+        $erreurs = $oFavoris->erreurs;
+        if (count($erreurs) === 0) {
+            $this->oRequetesSQL->supprimerFavoris([
+                "favoris_utilisateur_id" => $oFavoris->favoris_utilisateur_id,
+                "favoris_enchere_id" => $oFavoris->favoris_enchere_id
+            ]);
+        }
+
+        $retourFiche = new Frontend;
+        $retourFiche->afficherFiche();
     }
 }

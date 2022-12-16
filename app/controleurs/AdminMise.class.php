@@ -63,7 +63,7 @@ class AdminMise extends Admin
       $encheres = $this->oRequetesSQL->getEncheres();
     }
     (new Vue)->generer(
-      'vEncheres',
+      'frontend/vEncheres',
       array(
         'titre'  => "Enchères",
         'mise'   => $mise,
@@ -72,7 +72,7 @@ class AdminMise extends Admin
         'succes' => $succes,
         'erreurs'      => $erreurs
       ),
-      "gabarit-frontend"
+      "gabarits/gabarit-frontend"
     );
   }
 
@@ -128,7 +128,7 @@ class AdminMise extends Admin
     }
 
     (new Vue)->generer(
-      'vFiche',
+      'frontend/vFiche',
       array(
         'titre'  => "Fiche",
         'mise'   => $mise,
@@ -139,7 +139,7 @@ class AdminMise extends Admin
         'succes' => $succes,
         'erreurs'      => $erreurs
       ),
-      "gabarit-frontend"
+      "gabarits/gabarit-frontend"
     );
   }
 

@@ -129,12 +129,12 @@ class RequetesSQL extends RequetesPDO
     return $this->getLignes($champs);
   }
 
-   /**
+  /**
    * Récupération des timbres par l'id du timbre
    * @param array $champs tableau des champs
    * @return string|boolean clé primaire de la ligne ajoutée, false sinon
    */
-  public function getTimbre($champs)
+  public function getTimbre($timbre_id)
   {
     $this->sql =
       "SELECT * 
@@ -143,8 +143,7 @@ class RequetesSQL extends RequetesPDO
        INNER JOIN `condition` ON timbre_condition_id = condition_id
       WHERE timbre_id = :timbre_id
     ";
-
-    return $this->getLignes($champs);
+    return $this->getLignes(['timbre_id' => $timbre_id], RequetesPDO::UNE_SEULE_LIGNE);
   }
 
   /**
@@ -172,6 +171,29 @@ class RequetesSQL extends RequetesPDO
   {
     $this->sql = '
       INSERT INTO timbre SET timbre_nom = :timbre_nom, timbre_annee = :timbre_annee, timbre_description = :timbre_description, timbre_histoire = :timbre_histoire, timbre_dimension = :timbre_dimension,timbre_certification = :timbre_certification, timbre_couleur = :timbre_couleur, timbre_tirage = :timbre_tirage, timbre_pays_id = :timbre_pays_id, timbre_condition_id = :timbre_condition_id, timbre_status_id = :timbre_status_id, timbre_utilisateur_id = :timbre_utilisateur_id';
+    return $this->CUDLigne($champs);
+  }
+
+  /**
+   * Modifier un timbre
+   * @param array $champs tableau avec les champs à modifier et la clé timbre_id
+   * @return boolean true si modification effectuée, false sinon
+   */
+  public function modifierTimbre($champs)
+  {
+    $this->sql = '
+      UPDATE timbre SET timbre_nom = :timbre_nom,
+       timbre_annee = :timbre_annee,
+       timbre_description = :timbre_description,
+       timbre_histoire = :timbre_histoire,
+       timbre_dimension = :timbre_dimension,
+       timbre_certification = :timbre_certification,
+       timbre_couleur = :timbre_couleur,
+       timbre_tirage = :timbre_tirage,
+       timbre_pays_id =:timbre_pays_id,
+       timbre_condition_id = :timbre_condition_id,
+       timbre_utilisateur_id = :timbre_utilisateur_id
+       WHERE timbre_id = :timbre_id';
     return $this->CUDLigne($champs);
   }
 
@@ -310,17 +332,29 @@ class RequetesSQL extends RequetesPDO
    * @return string|boolean clé primaire de la ligne ajoutée, false sinon
    */
 
-   public function getEnchere($mise_enchere_id)
-   {
-     $this->sql =
-       "SELECT *
+  public function getEnchere($mise_enchere_id)
+  {
+    $this->sql =
+      "SELECT *
      FROM enchere
      where enchere_id = :mise_enchere_id 
     group by enchere_id 
    ";
- 
-     return $this->getLignes(['mise_enchere_id' => $mise_enchere_id], RequetesPDO::UNE_SEULE_LIGNE);
-   }
+
+    return $this->getLignes(['mise_enchere_id' => $mise_enchere_id], RequetesPDO::UNE_SEULE_LIGNE);
+  }
+
+  /**
+   * Supprimer une enchere
+   * @param int $enchere_id clé primaire
+   * @return boolean true si suppression effectuée, false sinon
+   */
+  public function supprimerEnchere($enchere_id)
+  {
+    $this->sql = '
+      DELETE FROM enchere WHERE enchere_id = :enchere_id';
+    return $this->CUDLigne(['enchere_id' => $enchere_id]);
+  }
 
 
   /* GESTION DES UTILISATEURS 
@@ -440,5 +474,73 @@ class RequetesSQL extends RequetesPDO
     $this->sql = '
     SELECT utilisateur_courriel FROM utilisateur WHERE utilisateur_courriel = :utilisateur_courriel AND utilisateur_id != :utilisateur_id';
     return $this->getLignes(['utilisateur_courriel' => $utilisateur_courriel, 'utilisateur_id' => $utilisateur_id], RequetesPDO::UNE_SEULE_LIGNE);
+  }
+
+
+  /* GESTION DES FAVORIS 
+     ======================== */
+
+  //  /**
+  //  * Ajouter un favoris/suivre une enchère
+  //  * @param array $champs tableau des champs de l'ajout de favoris
+  //  * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+  //  */
+  public function ajouterFavoris($champs)
+  {
+    $this->sql = '
+      INSERT INTO favoris SET favoris_utilisateur_id = :favoris_utilisateur_id, favoris_enchere_id = :favoris_enchere_id';
+    return $this->CUDLigne($champs);
+  }
+
+  /**
+   * Récupération de tous les favoris
+   * @param array $champs tableau des champs
+   * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+   */
+  public function getFavoris()
+  {
+    $this->sql =
+      "SELECT *
+      FROM favoris
+      
+    ";
+    return $this->getLignes();
+  }
+
+  /**
+   * Supprimer un favoris
+   * @param int $enchere_id clé primaire
+   * @return boolean true si suppression effectuée, false sinon
+   */
+  public function supprimerFavoris($champs)
+  {
+    $this->sql = '
+      DELETE FROM favoris WHERE favoris_utilisateur_id = :favoris_utilisateur_id AND favoris_enchere_id = :favoris_enchere_id';
+    return $this->CUDLigne($champs);
+  }
+
+
+  /**
+   * Récupération des favoris par l'id de l'utilisateur
+   * @param array $utilisateur_id tableau des champs
+   * @return string|boolean clé primaire de la ligne ajoutée, false sinon
+   */
+
+  public function getFavorisById($champs)
+  {
+    $this->sql =
+    "SELECT *
+      FROM favoris
+      INNER join enchere on enchere_id = favoris_enchere_id
+      INNER JOIN timbre ON enchere_timbre_id = timbre_id
+      INNER JOIN pays ON timbre_pays_id = pays_id
+      LEFT OUTER JOIN mise ON enchere_id = mise_enchere_id and mise_valeur =(select max(mise_valeur) from mise where enchere_id = mise_enchere_id) 
+      INNER JOIN `condition` ON timbre_condition_id = condition_id
+      INNER JOIN image ON image_timbre_id = timbre_id
+      WHERE favoris_utilisateur_id = :utilisateur_id
+      GROUP BY timbre_id
+    ";
+
+    return $this->getLignes($champs);
   }
 }

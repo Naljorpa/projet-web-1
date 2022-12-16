@@ -24,14 +24,14 @@ class GestionCourriel
     $objetCourriel = "Identifiant et mot de passe";
 
     $message  = (new Vue)->generer(
-      'cMdp',
+      'courriels/cMdp',
       [
         'titre'        => 'Information',
         'http_host'    => $_SERVER['HTTP_HOST'],
         'oUtilisateur' => $oUtilisateur
         // 'headers'      => $headers
       ],
-      'gabarit-frontend',
+      'gabarits/gabarit-frontend',
       true
     );
 

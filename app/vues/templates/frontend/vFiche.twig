@@ -1,5 +1,5 @@
 <script>
-	history.pushState({}, '', 'fiche?enchere_id={{ fiche.enchere_id }}')
+	history.pushState({}, '', 'fiche?enchere_id=       {{ fiche.enchere_id }}')
 </script>
 <section class="fiche-enchere">
 	<div class="image-mise">
@@ -66,11 +66,21 @@
 					{% if session.oUtilisateur is defined and fiche.timbre_status_id == 1 %}
 						<input type="submit" class="btn-big" value="Miser">
 						<span>&nbsp;{{ succes }}</span>
+						{% set exist = false %}
+						{% for unFavoris in listeFavoris %}
+							{% if unFavoris.favoris_utilisateur_id == session.oUtilisateur.utilisateur_id  and unFavoris.favoris_enchere_id == fiche.enchere_id %}
+								{% set exist = true %}
+							{% endif %}
+						{% endfor %}
+						{% if exist == true %}
+							<a href="admin?entite=utilisateur&action=nse&enchere_id={{ fiche.enchere_id }}">Ne plus suivre cette enchère »</a>
+						{% else %}
+							<a href="admin?entite=utilisateur&action=se&enchere_id={{ fiche.enchere_id }}">Suivre cette enchère »</a>
+						{% endif %}
 					{% endif %}
 					{% if session.oUtilisateur is null %}
 						<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>
 					{% endif %}
-					<a href="#">Suivre cette enchère »</a>
 				</div>
 			</form>
 		</div>
@@ -228,5 +238,4 @@
 			<button type="submit" class="btn">Miser</button>
 		</article>
 	</div>
-
 </section>

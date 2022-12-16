@@ -1,0 +1,64 @@
+<section class="mes-timbres">
+	<h1>{{ titre }}</h1>
+	<div class="grid-encheres">
+	{% for favori in favoris %}
+
+			<article class="card">
+				<picture>
+					<img src="{{ favori.image_lien }}" alt=" {{ favori.image_nom }} ">
+				</picture>
+				<a href="fiche?enchere_id={{ favori.enchere_id }}">
+					<h1>{{ favori.timbre_nom }}</h1>
+				</a>
+				<hr>
+				<small class="temps">
+					<span>Temps Restant:
+					</span>
+					<span>
+						{% if favori.timbre_status_id == 1 %}
+							{% set difference = date(favori.enchere_date_fin).diff(date(now)) %}
+							{% set leftDays = difference.days %}
+							{% set leftHours = difference.h %}
+							{% set leftMinutes = difference.i %}
+							{{ leftDays }}j
+							{{ leftHours }}h
+							{{ leftMinutes }}min.
+						{% else %}
+							0j 0h 0min.
+						{% endif %}
+					</span>
+				</small>
+				<form method="POST" action="admin?entite=mise&action=a">
+					<div class="mise">
+						<div class="depart-actuel">
+							<small>Départ:
+								{{ favori.enchere_prix_base }}$</small>
+							<small>Actuel:
+								<span class="text-red">{{ favori.mise_valeur}}$</span>
+							</small>
+						</div>
+						<input type="hidden" name="enchere_id" value="{{ favori.enchere_id }}">
+						<input type="hidden" name="utilisateur_id" value="{{ session.oUtilisateur.utilisateur_id }}">
+						{% if favori.timbre_status_id == 1 %}
+							<input type="number" name="mise_valeur" placeholder="$">
+
+						{% else %}
+							<span>Période de mise terminée</span>
+						{% endif %}
+						{# value="{{ mise.mise_valeur }} #}
+					</div>
+
+					{% if session.oUtilisateur is defined and favori.timbre_status_id == 1 %}
+						<input type="submit" class="btn" value="Miser">
+					{% else %}
+						<span></span>
+					{% endif %}
+					{% if session.oUtilisateur is null %}
+						<a class="connect-enchere" href="connexion">Connectez-vous pour miser >></a>
+					{% endif %}
+				</form>
+			</article>
+		{% endfor %}
+
+	</div>
+</section>

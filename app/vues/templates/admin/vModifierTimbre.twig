@@ -1,0 +1,74 @@
+<section class="modification">
+	<h1>{{ titre|upper }}</h1>
+
+	<form method="POST" action="admin?entite=timbre&action=m">
+
+		<label>Nom</label>
+		<input name="timbre_nom" value="{{ timbre.timbre_nom }}">
+		<span>&nbsp;{{ erreurs.timbre_nom }}</span>
+
+		<label>Pays</label>
+		<select name="timbre_pays_id">
+			{% for unPays in pays  %}
+				{% if unPays.pays_id == timbre|first.pays_id %}
+					<option selected value="{{ unPays.pays_id }}">{{ unPays.pays_nom }}</option>
+				{% else %}
+					<option value="{{ unPays.pays_id }}">{{ unPays.pays_nom }}</option>
+				{% endif %}
+			{% endfor %}
+		</select>
+		<span class="text-red">{{ erreurs.timbre_pays_id }}</span>
+
+		<label>Année</label>
+		<input type="text" name="timbre_annee" value="{{ timbre.timbre_annee }}">
+		<span class="text-red">{{ erreurs.timbre_annee}}</span>
+
+		<label>Description</label>
+		<textarea rows="4" cols="50" name="timbre_description">{{ timbre.timbre_description }}</textarea>
+		<span class="text-red">{{ erreurs.timbre_description }}</span>
+
+		<label>Histoire</label>
+		<textarea rows="4" cols="50" name="timbre_histoire">{{ timbre.timbre_histoire }}</textarea>
+		<span class="text-red">{{ erreurs.timbre_histoire }}</span>
+
+		<label>Dimension</label>
+		<input type="text" name="timbre_dimension" value="{{ timbre.timbre_dimension }}">
+		<span class="text-red">{{ erreurs.timbre_dimension }}</span>
+
+		<label>Certification</label>
+		<div>
+			<input type="radio" id="1" name="timbre_certification" value="1" checked>
+			<label for="1">oui</label>
+			<input type="radio" id="2" name="timbre_certification" value="2">
+			<label for="2">non</label>
+		</div>
+		<span class="text-red">{{ erreurs.timbre_certification }}</span>
+
+		<label>Couleur</label>
+		<input type="text" name="timbre_couleur" value="{{ timbre.timbre_couleur }}">
+		<span class="text-red">{{ erreurs.timbre_couleur }}</span>
+
+		<label>Tirage</label>
+		<input type="text" name="timbre_tirage" value="{{ timbre.timbre_tirage }}">
+		<span class="text-red">{{ erreurs.timbre_tirage }}</span>
+
+		<label>Condition</label>
+		<select name="timbre_condition_id">
+			{% for uneCondition in condition %}
+				{% if uneCondition.condition_id == timbre.condition_id  %}
+					<option selected value="{{ uneCondition.condition_id }}">{{ uneCondition.condition_name }}</option>
+				{% else %}
+					<option value="{{ uneCondition.condition_id }}">{{ uneCondition.condition_name }}</option>
+				{% endif %}
+			{% endfor %}
+		</select>
+		<span class="text-red">{{ erreurs.timbre_condition_id }}</span>
+
+		<input type="hidden" name="timbre_utilisateur_id" value="{{ oUtilisateur.utilisateur_id }}">
+
+		<input type="hidden" name="timbre_id" value="{{ timbre.timbre_id }}">
+
+		<input class="btn" type="submit" value="Envoyer">
+
+	</form>
+</section>

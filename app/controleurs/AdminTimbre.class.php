@@ -123,7 +123,7 @@ class AdminTimbre extends Admin
                 $timbre = "";
             }
             (new Vue)->generer(
-                'vProfile',
+                'admin/vProfile',
                 array(
                     'oUtilisateur'        =>  $session,
                     'titre'               => 'Profile d\'utilisateur',
@@ -137,11 +137,11 @@ class AdminTimbre extends Admin
                     'erreurs'             => $erreurs,
                     'erreurImage'         => $erreurImage
                 ),
-                'gabarit-frontend'
+                'gabarits/gabarit-frontend'
             );
         }
         (new Vue)->generer(
-            'vProfile',
+            'admin/vProfile',
             array(
                 'oUtilisateur'        =>  $session,
                 'titre'               => 'Profile d\'utilisateur',
@@ -155,7 +155,7 @@ class AdminTimbre extends Admin
                 'erreurs'             => $erreurs,
                 'erreurImage'         => $erreurImage
             ),
-            'gabarit-frontend'
+            'gabarits/gabarit-frontend'
         );
     }
 
@@ -173,51 +173,46 @@ class AdminTimbre extends Admin
         $pays = $this->oRequetesSQL->getPays();
         $condition =  $this->oRequetesSQL->getCondition();
         $status =  $this->oRequetesSQL->getStatus();
+        $this->messageRetourAction = "";
 
-        if (!preg_match('/^\d+$/', $this->timbre_id))
-            throw new Exception("Numéro de timbre non renseigné pour une modification");
+        $erreurs = [];
 
         $timbre = $this->oRequetesSQL->getTimbre(
-            [
-                "timbre_id" => $this->timbre_id
-            ]
-            );
-
-        echo '<pre>',print_r($timbre),'</pre>';
+            $this->timbre_id
+        );
 
         if (count($_POST) !== 0) {
             $timbre = $_POST;
+
             $oTimbre = new Timbre($timbre);
-            //   $oUtilisateur->courrielExiste();
-            //   $erreurs = $oUtilisateur->erreurs;
-            //   if (count($erreurs) === 0) {
-            //     $retour = $this->oRequetesSQL->modifierUtilisateur([
-            //       'utilisateur_id'       => $oUtilisateur->utilisateur_id, 
-            //       'utilisateur_courriel' => $oUtilisateur->utilisateur_courriel,
-            //       'utilisateur_nom'      => $oUtilisateur->utilisateur_nom,
-            //       'utilisateur_prenom'   => $oUtilisateur->utilisateur_prenom,
-            //       'utilisateur_profil'   => $oUtilisateur->utilisateur_profil
-            //     ]);
-            //     if ($retour !== Utilisateur::ERR_COURRIEL_EXISTANT) {
-            //       if ($retour === true)  {
-            //         $this->messageRetourAction = "Modification de l'utilisateur numéro $this->utilisateur_id effectuée.";    
-            //       } else {  
-            //         $this->classRetour = "erreur";
-            //         $this->messageRetourAction = "Modification de l'utilisateur numéro $this->utilisateur_id non effectuée.";
-            //       }
-            //       $this->listerUtilisateurs();
-            //       exit;
-            //     } else {
-            //       $erreurs['utilisateur_courriel'] = $retour;
-            //     }
-            //   }
-            // } else {
-            //   $utilisateur = $this->oRequetesSQL->getUtilisateur($this->utilisateur_id);
-            //   $erreurs = [];
+
+              $erreurs = $oTimbre->erreurs;
+              if (count($erreurs) === 0) {
+                if ($this->oRequetesSQL->modifierTimbre([
+                    'timbre_id'     => $oTimbre->timbre_id,
+                    'timbre_nom'    => $oTimbre->timbre_nom,
+                    'timbre_annee' => $oTimbre->timbre_annee,
+                    'timbre_description' => $oTimbre->timbre_description,
+                    'timbre_histoire' => $oTimbre->timbre_histoire,
+                    'timbre_dimension' => $oTimbre->timbre_dimension,
+                    'timbre_certification' => $oTimbre->timbre_certification,
+                    'timbre_couleur' => $oTimbre->timbre_couleur,
+                    'timbre_tirage' => $oTimbre->timbre_tirage,
+                    'timbre_pays_id' => $oTimbre->timbre_pays_id,
+                    'timbre_condition_id' => $oTimbre->timbre_condition_id,
+                    'timbre_utilisateur_id' => $oTimbre->timbre_utilisateur_id
+                ])) {
+                    $this->messageRetourAction = "Modification du timbre numéro $oTimbre->timbre_id effectuée.";
+                } else {
+                    $this->classRetour = "erreur";
+                    $this->messageRetourAction = "modification du timbre numéro $oTimbre->timbre_id non effectuée.";
+                }
+
+            }
         }
 
         (new Vue)->generer(
-            'vModifierTimbre',
+            'admin/vModifierTimbre',
             [
                 'oUtilisateur'        =>  $session,
                 'titre'       => "Modifier le timbre numéro $this->timbre_id",
@@ -225,9 +220,10 @@ class AdminTimbre extends Admin
                 'pays'                => $pays,
                 'condition'           => $condition,
                 'status'              => $status,
-                // 'erreurs'     => $erreurs
+                'erreurs'     => $erreurs,
+                'messageRetourAction' => $this->messageRetourAction
             ],
-            'gabarit-frontend'
+            'gabarits/gabarit-frontend'
         );
     }
 }

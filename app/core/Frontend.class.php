@@ -36,13 +36,13 @@ class Frontend extends Routeur
     }
 
     (new Vue)->generer(
-      "vAccueil",
+      "frontend/vAccueil",
       array(
         'titre'  => "Accueil",
         'oUtilisateur'        =>  $session,
         'messageRetourAction' => $messageRetourAction
       ),
-      "gabarit-frontend"
+      "gabarits/gabarit-frontend"
     );
   }
 
@@ -54,11 +54,11 @@ class Frontend extends Routeur
   public function inscription()
   {
     (new Vue)->generer(
-      "vInscription",
+      "frontend/vInscription",
       array(
         'titre'  => "Inscription"
       ),
-      "gabarit-frontend"
+      "gabarits/gabarit-frontend"
     );
   }
 
@@ -70,11 +70,11 @@ class Frontend extends Routeur
   public function connexion()
   {
     (new Vue)->generer(
-      "vConnection",
+      "frontend/vConnection",
       array(
         'titre'  => "Connexion"
       ),
-      "gabarit-frontend"
+      "gabarits/gabarit-frontend"
     );
   }
 
@@ -103,7 +103,7 @@ class Frontend extends Routeur
     $listeTimbre = $this->oRequetesSQL->getTimbres();
 
     (new Vue)->generer(
-      'vProfile',
+      'admin/vProfile',
       array(
         'oUtilisateur'        =>  $session,
         'titre'               => 'Profile d\'utilisateur',
@@ -113,7 +113,7 @@ class Frontend extends Routeur
         'listeTimbre'         => $listeTimbre,
         'listeTimbreById'     => $listeTimbreById
       ),
-      'gabarit-frontend'
+      'gabarits/gabarit-frontend'
     );
   }
   /**
@@ -187,7 +187,7 @@ class Frontend extends Routeur
 
 
       (new Vue)->generer(
-        "vEncheres",
+        "frontend/vEncheres",
         array(
           'titre'  => "Enchères",
           'oUtilisateur'        =>  $session,
@@ -198,7 +198,7 @@ class Frontend extends Routeur
           'prixMin' => $prixMin,
           'prixMax' => $prixMax
         ),
-        "gabarit-frontend"
+        "gabarits/gabarit-frontend"
       );
     } else {
 
@@ -206,13 +206,13 @@ class Frontend extends Routeur
 
 
       (new Vue)->generer(
-        "vEncheres",
+        "frontend/vEncheres",
         array(
           'titre'  => "Enchères",
           'oUtilisateur'        =>  $session,
           'encheres' => $encheres
         ),
-        "gabarit-frontend"
+        "gabarits/gabarit-frontend"
       );
     }
   }
@@ -226,6 +226,8 @@ class Frontend extends Routeur
   {
     $fiche = false;
     $miseMax = "";
+
+    $listeFavoris = $this->oRequetesSQL->getFavoris();
 
     if (!is_null($this->enchere_id)) {
       $fiche = $this->oRequetesSQL->getFiche($this->enchere_id);
@@ -244,15 +246,16 @@ class Frontend extends Routeur
     }
 
     (new Vue)->generer(
-      "vFiche",
+      "frontend/vFiche",
       array(
         'titre'  => "Fiche",
         'oUtilisateur'        =>  $session,
         'fiche' => $fiche,
         'images' => $images,
-        'miseActuelle' =>  $miseMax
+        'miseActuelle' =>  $miseMax,
+        'listeFavoris' => $listeFavoris
       ),
-      "gabarit-frontend"
+      "gabarits/gabarit-frontend"
     );
   }
 }

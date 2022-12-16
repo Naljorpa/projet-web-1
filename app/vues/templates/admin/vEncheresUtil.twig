@@ -1,6 +1,5 @@
 <section class="mes-timbres">
 	<h1>{{ titre }}</h1>
-	<p class="messageRetourAction {{ classRetour }}">{{ messageRetourAction|raw }}&nbsp;</p>
 	<div class="g timbres">
 		<div class="t">Id</div>
 		<div class="t">Nom</div>
@@ -27,7 +26,11 @@
 						archivé
 					{% endif %}
 				</div>
-				<div class="c   ">modifier</div>
+				<div class="c   ">
+					{% if enchere.timbre_status_id == 3 or enchere.timbre_status_id == 2 %}
+					<a class="supprimer" href="admin?entite=enchere&action=s&enchere_id={{ enchere.enchere_id }}">supprimer</a>
+					{% endif %}
+				</div>
 			</div>
 		{% endfor %}
 	</div>

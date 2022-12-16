@@ -3,7 +3,7 @@
 </script>
 <section class="profile">
 	<h1>{{ titre|upper }}</h1>
-{{ messageRetourAction|raw }}
+	{{ messageRetourAction|raw }}
 	<div class="profile-itself">
 		<div>
 			<p>Nom:
@@ -14,10 +14,10 @@
 				{{ oUtilisateur.utilisateur_courriel}}</p>
 		</div>
 		<div>
-		<h2></h2>
 			<a class="voir-timbres" href="admin?entite=utilisateur&action=vt">Voir mes timbres >></a>
 			<a class="voir-encheres" href="admin?entite=utilisateur&action=ve">Voir mes enchères >></a>
 			<a class="voir-mises" href="admin?entite=utilisateur&action=sm">Suivre mes mises >></a>
+			<a class="voir-encheres-suivi" href="admin?entite=utilisateur&action=ves">Voir les enchères suivies >></a>
 		</div>
 		<div>
 			<a class="modifier" href="admin?entite=utilisateur&action=m">Modifier mon profile >></a>
@@ -145,7 +145,7 @@
 
 		<label>Choisissez la fin de votre enchère</label>
 		<input type="datetime-local" name="enchere_date_fin">
-		<span class="text-red">{{ erreurs.enchere_date_id }}</span>
+		<span class="text-red">{{ erreurs.enchere_date_fin }}</span>
 
 		<input type="hidden" name="enchere_utilisateur_id" value="{{ oUtilisateur.utilisateur_id }}">
 
@@ -153,4 +153,4 @@
 
 	</form>
 </section>
-{{ include("modaleSuppression.twig") }}
+{{ include("admin/modaleSuppression.twig") }}

@@ -7,12 +7,28 @@
 class AdminEnchere extends Admin
 {
 
-    protected $methodes =   [
-            'a' => [
-                'nom' => 'ajouterEnchere', 'droits' => [Utilisateur::PROFIL_MEMBRE]]
-    ];
+  protected $methodes =   [
+    'a' => [
+      'nom' => 'ajouterEnchere', 'droits' => [Utilisateur::PROFIL_MEMBRE]
+    ],
+    's' => [
+      'nom' => 'supprimerEnchere', 'droits' => [Utilisateur::PROFIL_MEMBRE]
+    ]
+  ];
 
-    /**
+  /**
+   * Constructeur qui initialise des propriétés à partir du query string
+   * et la propriété oRequetesSQL déclarée dans la classe Routeur
+   * 
+   */
+  public function __construct()
+  {
+    $this->enchere_id = $_GET['enchere_id'] ?? null;
+    $this->oRequetesSQL = new RequetesSQL;
+  }
+
+
+  /**
    * Ajouter/activer une enchère
    */
   public function ajouterEnchere()
@@ -67,7 +83,7 @@ class AdminEnchere extends Admin
     }
 
     (new Vue)->generer(
-      'vProfile',
+      '/admin/vProfile',
       array(
         'oUtilisateur'        =>  $session,
         'titre'               => 'Profile d\'utilisateur',
@@ -79,7 +95,45 @@ class AdminEnchere extends Admin
         'erreurs'             => $erreurs,
         'ajouter'             => $ajouter
       ),
-      'gabarit-frontend'
+      'gabarits/gabarit-frontend'
+    );
+  }
+
+  /**
+   * Supprimer une enchère
+   */
+  public function supprimerEnchere()
+  {
+    $this->messageRetourAction = "";
+    $this->classRetour = "";
+
+    if (isset($_SESSION['oUtilisateur'])) {
+      $session = $_SESSION['oUtilisateur'];
+    } else {
+      $session = null;
+    }
+
+    
+    if ($this->oRequetesSQL->supprimerEnchere($this->enchere_id)) {
+      $this->messageRetourAction = "Suppression de l'enchère effectuée";
+    } else {
+      $this->classRetour = "erreur";
+      $this->messageRetourAction = "Suppression du timbre non effectuée.";
+    }
+    
+    $encheres = $this->oRequetesSQL->getEncheresById([
+      "utilisateur_id" => $session->utilisateur_id
+    ]);
+    (new Vue)->generer(
+      "admin/vEncheresUtil",
+      array(
+        'titre'  => "Mes enchères",
+        'oUtilisateur'        =>  $session,
+        'encheres' => $encheres,
+        'messageRetourAction' => $this->messageRetourAction,
+        'classRetour' => $this->classRetour
+      ), 
+      "gabarits/gabarit-frontend"
     );
   }
 }

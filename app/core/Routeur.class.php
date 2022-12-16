@@ -75,13 +75,13 @@ class Routeur
       header('HTTP/1.1 403 Forbidden');
     } else if ($message == self::ERROR_NOT_FOUND) {
       header('HTTP/1.1 404 Not Found');
-      (new Vue)->generer('vErreur404', [], 'gabarit-erreur');
+      (new Vue)->generer('erreurs/vErreur404', [], 'gabarits/gabarit-erreur');
     } else {
       header('HTTP/1.1 500 Internal Server Error');
       (new Vue)->generer(
-        'vErreur500',
+        'erreurs/vErreur500',
         ['message' => $message, 'fichier' => $e->getFile(), 'ligne' => $e->getLine()],
-        'gabarit-erreur'
+        'gabarits/gabarit-erreur'
       );
     }
     exit;

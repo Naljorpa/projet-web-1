@@ -130,9 +130,11 @@ class Enchere
    */    
   public function setEnchere_date_fin($enchere_date_fin) {
     unset($this->erreurs['enchere_date_fin']);
-    $regExp = '/^.+$/';
-    if (!preg_match($regExp, $enchere_date_fin)){
-      $this->erreurs['enchere_date_fin'] = 'Doit être de format valide.';
+    $enchere_date_debut = new DateTime("now", new DateTimeZone('America/New_York'));
+    $enchere_date_fin = new DateTime($enchere_date_fin);
+    echo $enchere_date_fin <= $enchere_date_debut;
+    if($enchere_date_fin <= $enchere_date_debut){
+      $this->erreurs['enchere_date_fin'] = "Doit être supérieur à la date d'aujourd'hui";
     }
     $this->enchere_date_fin = $enchere_date_fin;
     return $this;

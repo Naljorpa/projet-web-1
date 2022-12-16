@@ -80,7 +80,22 @@
     line-height: 18px;
 }
 
-.mes-timbres .modifier:hover{
+.mes-timbres .modifier:hover, .mes-timbres .supprimer:hover{
     color: var(--oldred);
     text-decoration: underline;
 }
+
+@media screen and (max-width: 925px) {
+    .profile .profile-itself{
+        flex-direction: column;
+    }
+    .profile .profile-itself>div:not(:last-of-type){
+        border-right: none;
+        margin-bottom: var(--spacing-S);
+    }
+
+    .profile form div{
+      flex-direction: column;
+        
+    }
+}   
